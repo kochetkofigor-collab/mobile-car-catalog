@@ -165,7 +165,7 @@ export default function CarDetail() {
             </Button>
             <Button
               variant="outline"
-              className="w-full border-primary/30 hover:bg-primary/10 active:bg-primary active:text-white active:border-primary [&_svg]:active:text-white"
+              className="w-full border-primary/30 hover:bg-primary/10 hover:text-white [&_svg]:hover:text-white active:bg-primary active:text-white active:border-primary [&_svg]:active:text-white"
               onClick={() => window.open('tel:+79999999999', '_blank')}
             >
               <Icon name="Phone" size={18} className="mr-2" />
