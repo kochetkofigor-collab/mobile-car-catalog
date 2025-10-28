@@ -91,7 +91,7 @@ export default function Admin() {
   };
 
   const handleDeleteLandlord = (landlordId: number) => {
-    if (!confirm('Удалить этого арендодателя?')) return;
+    if (!confirm('Удалить этого комитента?')) return;
 
     fetch(`https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73?id=${landlordId}`, {
       method: 'DELETE'
@@ -145,8 +145,8 @@ export default function Admin() {
               <span className="ml-1">({cars.length})</span>
             </TabsTrigger>
             <TabsTrigger value="landlords" className="text-xs md:text-sm">
-              <span className="hidden sm:inline">Арендодатели</span>
-              <span className="sm:hidden">Аренда</span>
+              <span className="hidden sm:inline">Комитенты</span>
+              <span className="sm:hidden">Комит.</span>
               <span className="ml-1">({landlords.length})</span>
             </TabsTrigger>
             <TabsTrigger value="cities" className="text-xs md:text-sm">Города</TabsTrigger>
@@ -234,7 +234,7 @@ export default function Admin() {
 
           <TabsContent value="landlords" className="space-y-4">
             <Card className="p-4 md:p-6">
-              <h2 className="font-cormorant text-xl md:text-2xl font-semibold mb-4">Управление арендодателями</h2>
+              <h2 className="font-cormorant text-xl md:text-2xl font-semibold mb-4">Управление комитентами</h2>
               <div className="space-y-3">
                 {landlords.map(landlord => (
                   <Card key={landlord.id} className="p-3 md:p-4 hover:border-primary/50 transition-all">
@@ -294,7 +294,7 @@ export default function Admin() {
                 }}
               >
                 <Icon name="Plus" size={18} className="mr-2" />
-                Добавить арендодателя
+                Добавить комитента
               </Button>
             </Card>
           </TabsContent>

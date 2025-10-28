@@ -148,7 +148,7 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Арендодатель</label>
+            <label className="block text-sm font-medium mb-2">Комитент</label>
             <Select 
               value={formData.landlord?.id?.toString() || 'none'} 
               onValueChange={(value) => {
@@ -161,10 +161,10 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Выберите арендодателя" />
+                <SelectValue placeholder="Выберите комитента" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="none">Без арендодателя</SelectItem>
+                <SelectItem value="none">Без комитента</SelectItem>
                 {landlords.map(landlord => (
                   <SelectItem key={landlord.id} value={landlord.id.toString()}>
                     {landlord.name} {landlord.isVerified && '✓'}

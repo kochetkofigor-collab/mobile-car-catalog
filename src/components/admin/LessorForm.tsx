@@ -39,7 +39,7 @@ export default function LessorForm({ lessor, onSave, onCancel }: LessorFormProps
       <div className="bg-background rounded-2xl border border-border max-w-lg w-full">
         <div className="bg-background border-b border-border px-6 py-4 flex items-center justify-between rounded-t-2xl">
           <h2 className="text-xl font-semibold">
-            {lessor ? 'Редактировать арендодателя' : 'Добавить арендодателя'}
+            {lessor ? 'Редактировать комитента' : 'Добавить комитента'}
           </h2>
           <button onClick={onCancel} className="p-2 hover:bg-muted rounded-full transition-colors">
             <Icon name="X" size={20} />
@@ -93,7 +93,7 @@ export default function LessorForm({ lessor, onSave, onCancel }: LessorFormProps
                 onChange={(e) => handleChange('isVerified', e.target.checked)}
                 className="w-4 h-4 rounded border-input"
               />
-              <span className="text-sm">Проверенный арендодатель</span>
+              <span className="text-sm">Проверенный комитент</span>
             </label>
           </div>
 
