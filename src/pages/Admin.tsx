@@ -71,6 +71,26 @@ export default function Admin() {
       .catch(err => console.error('Failed to save landlord:', err));
   };
 
+  const handleDeleteCar = (carId: number) => {
+    if (!confirm('Удалить этот автомобиль?')) return;
+
+    fetch(`https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb?id=${carId}`, {
+      method: 'DELETE'
+    })
+      .then(() => loadData())
+      .catch(err => console.error('Failed to delete car:', err));
+  };
+
+  const handleDeleteLandlord = (landlordId: number) => {
+    if (!confirm('Удалить этого арендодателя?')) return;
+
+    fetch(`https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73?id=${landlordId}`, {
+      method: 'DELETE'
+    })
+      .then(() => loadData())
+      .catch(err => console.error('Failed to delete landlord:', err));
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -131,10 +151,26 @@ export default function Admin() {
                           <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs rounded">Акция</span>
                         )}
                       </div>
-                      <Button variant="outline" size="sm">
-                        <Icon name="Pencil" size={16} className="mr-1" />
-                        Редактировать
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setEditingCar(car);
+                            setShowCarForm(true);
+                          }}
+                        >
+                          <Icon name="Pencil" size={16} className="mr-1" />
+                          Редактировать
+                        </Button>
+                        <Button 
+                          variant="destructive" 
+                          size="sm"
+                          onClick={() => handleDeleteCar(car.id)}
+                        >
+                          <Icon name="Trash2" size={16} />
+                        </Button>
+                      </div>
                     </div>
                   </Card>
                 ))}
@@ -181,17 +217,26 @@ export default function Admin() {
                           )}
                         </div>
                       </div>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        onClick={() => {
-                          setEditingLandlord(landlord);
-                          setShowLandlordForm(true);
-                        }}
-                      >
-                        <Icon name="Pencil" size={16} className="mr-1" />
-                        Редактировать
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => {
+                            setEditingLandlord(landlord);
+                            setShowLandlordForm(true);
+                          }}
+                        >
+                          <Icon name="Pencil" size={16} className="mr-1" />
+                          Редактировать
+                        </Button>
+                        <Button 
+                          variant="destructive" 
+                          size="sm"
+                          onClick={() => handleDeleteLandlord(landlord.id)}
+                        >
+                          <Icon name="Trash2" size={16} />
+                        </Button>
+                      </div>
                     </div>
                   </Card>
                 ))}
