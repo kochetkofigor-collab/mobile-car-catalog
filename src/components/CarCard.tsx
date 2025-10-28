@@ -27,12 +27,12 @@ export const CarCard = ({ image, name, year, pricePerDay, isNew, isPromo, onClic
         {(isNew || isPromo) && (
           <div className="absolute top-3 right-3 flex gap-2">
             {isNew && (
-              <Badge className="bg-primary text-primary-foreground font-medium">
+              <Badge className="bg-primary text-primary-foreground font-medium pointer-events-none">
                 Новинка
               </Badge>
             )}
             {isPromo && (
-              <Badge className="bg-destructive text-destructive-foreground font-medium">
+              <Badge className="bg-destructive text-destructive-foreground font-medium pointer-events-none">
                 Акция
               </Badge>
             )}
