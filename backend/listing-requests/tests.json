@@ -1,0 +1,29 @@
+{
+  "tests": [
+    {
+      "name": "GET all requests",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": [],
+      "bodyMatcher": "type"
+    },
+    {
+      "name": "POST create new request",
+      "method": "POST",
+      "path": "/",
+      "body": {
+        "name": "Иван Иванов",
+        "phone": "+79991234567"
+      },
+      "expectedStatus": 201,
+      "expectedBody": {
+        "id": 1,
+        "name": "Иван Иванов",
+        "phone": "+79991234567",
+        "status": "new"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}

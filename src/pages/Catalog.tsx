@@ -4,6 +4,8 @@ import { CarCard } from '@/components/CarCard';
 import { CarFilters } from '@/components/CarFilters';
 import { Car } from '@/data/cars';
 import Icon from '@/components/ui/icon';
+import ListingRequestModal from '@/components/ListingRequestModal';
+import { Button } from '@/components/ui/button';
 
 export default function Catalog() {
   const navigate = useNavigate();
@@ -15,6 +17,7 @@ export default function Catalog() {
     year: 'all',
     city: 'all'
   });
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb')
@@ -56,10 +59,23 @@ export default function Catalog() {
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 pb-8">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
         <div className="max-w-md mx-auto px-4 py-4">
-          <h1 className="font-cormorant text-3xl font-bold text-center bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">KEYRIDER</h1>
-          <p className="text-center text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
+          <div className="flex items-center justify-between">
+            <div className="flex-1">
+              <h1 className="font-cormorant text-3xl font-bold text-center bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">KEYRIDER</h1>
+              <p className="text-center text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
+            </div>
+            <Button
+              size="icon"
+              className="rounded-full w-12 h-12 flex-shrink-0"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <Icon name="DollarSign" size={24} />
+            </Button>
+          </div>
         </div>
       </header>
+
+      <ListingRequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       <div className="max-w-md mx-auto px-4 space-y-6 mt-6">
         <CarFilters onFilterChange={setFilters} />

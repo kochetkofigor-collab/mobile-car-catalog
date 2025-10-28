@@ -14,6 +14,7 @@ export default function Admin() {
   const navigate = useNavigate();
   const [cars, setCars] = useState<Car[]>([]);
   const [landlords, setLandlords] = useState<Landlord[]>([]);
+  const [listingRequests, setListingRequests] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
   const [editingLandlord, setEditingLandlord] = useState<Landlord | null>(null);
@@ -33,11 +34,13 @@ export default function Admin() {
   const loadData = () => {
     Promise.all([
       fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb').then(r => r.json()),
-      fetch('https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73').then(r => r.json())
+      fetch('https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73').then(r => r.json()),
+      fetch('https://functions.poehali.dev/9e377815-dae4-48c3-a1c7-aafee87663ed').then(r => r.json())
     ])
-      .then(([carsData, landlordsData]) => {
+      .then(([carsData, landlordsData, requestsData]) => {
         setCars(carsData);
         setLandlords(landlordsData);
+        setListingRequests(requestsData);
         setLoading(false);
       })
       .catch(err => {
@@ -100,6 +103,16 @@ export default function Admin() {
       .catch(err => console.error('Failed to delete landlord:', err));
   };
 
+  const handleDeleteRequest = (requestId: number) => {
+    if (!confirm('Удалить эту заявку?')) return;
+
+    fetch(`https://functions.poehali.dev/9e377815-dae4-48c3-a1c7-aafee87663ed?id=${requestId}`, {
+      method: 'DELETE'
+    })
+      .then(() => loadData())
+      .catch(err => console.error('Failed to delete request:', err));
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -138,7 +151,7 @@ export default function Admin() {
 
       <div className="max-w-6xl mx-auto px-4 mt-4 md:mt-6">
         <Tabs defaultValue="cars" className="space-y-4 md:space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="cars" className="text-xs md:text-sm">
               <span className="hidden sm:inline">Автомобили</span>
               <span className="sm:hidden">Авто</span>
@@ -148,6 +161,11 @@ export default function Admin() {
               <span className="hidden sm:inline">Комитенты</span>
               <span className="sm:hidden">Комит.</span>
               <span className="ml-1">({landlords.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="requests" className="text-xs md:text-sm">
+              <span className="hidden sm:inline">Заявки</span>
+              <span className="sm:hidden">Заяв.</span>
+              <span className="ml-1">({listingRequests.length})</span>
             </TabsTrigger>
             <TabsTrigger value="cities" className="text-xs md:text-sm">Города</TabsTrigger>
           </TabsList>
@@ -296,6 +314,43 @@ export default function Admin() {
                 <Icon name="Plus" size={18} className="mr-2" />
                 Добавить комитента
               </Button>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="requests" className="space-y-4">
+            <Card className="p-4 md:p-6">
+              <h2 className="font-cormorant text-xl md:text-2xl font-semibold mb-4">Заявки на размещение</h2>
+              <div className="space-y-3">
+                {listingRequests.length === 0 ? (
+                  <p className="text-center text-muted-foreground py-8">Заявок пока нет</p>
+                ) : (
+                  listingRequests.map(request => (
+                    <Card key={request.id} className="p-3 md:p-4 hover:border-primary/50 transition-all">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
+                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                          <Icon name="User" size={24} className="text-primary" />
+                        </div>
+                        <div className="flex-1 min-w-0 w-full">
+                          <h3 className="font-semibold truncate">{request.name}</h3>
+                          <p className="text-sm text-muted-foreground">{request.phone}</p>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {new Date(request.createdAt).toLocaleString('ru-RU')}
+                          </p>
+                        </div>
+                        <Button 
+                          variant="destructive" 
+                          size="sm"
+                          onClick={() => handleDeleteRequest(request.id)}
+                          className="w-full sm:w-auto"
+                        >
+                          <Icon name="Trash2" size={16} className="sm:mr-1" />
+                          <span className="hidden sm:inline">Удалить</span>
+                        </Button>
+                      </div>
+                    </Card>
+                  ))
+                )}
+              </div>
             </Card>
           </TabsContent>
 
