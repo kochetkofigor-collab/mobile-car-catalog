@@ -21,9 +21,9 @@ export const cars: Car[] = [
     deposit: 50000,
     buyoutMonths: 36,
     images: [
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/5386e136-f36a-4a48-a473-9222f8482ad5.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/5386e136-f36a-4a48-a473-9222f8482ad5.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/5386e136-f36a-4a48-a473-9222f8482ad5.jpg'
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/919e78a9-fb0d-4981-a0b3-e23a40578130.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/919e78a9-fb0d-4981-a0b3-e23a40578130.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/919e78a9-fb0d-4981-a0b3-e23a40578130.jpg'
     ],
     isNew: true,
     isPromo: true
@@ -37,9 +37,9 @@ export const cars: Car[] = [
     deposit: 45000,
     buyoutMonths: 36,
     images: [
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/e38d92b8-3346-4e03-809b-d044ae2e80b0.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/e38d92b8-3346-4e03-809b-d044ae2e80b0.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/e38d92b8-3346-4e03-809b-d044ae2e80b0.jpg'
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/f2b3e76d-abab-42c4-9e07-b88f1aefe650.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/f2b3e76d-abab-42c4-9e07-b88f1aefe650.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/f2b3e76d-abab-42c4-9e07-b88f1aefe650.jpg'
     ],
     isNew: true
   },
@@ -52,9 +52,9 @@ export const cars: Car[] = [
     deposit: 42000,
     buyoutMonths: 36,
     images: [
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/a95b7a25-700d-4073-bc8e-6034f5e34787.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/a95b7a25-700d-4073-bc8e-6034f5e34787.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/a95b7a25-700d-4073-bc8e-6034f5e34787.jpg'
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/59a7321f-5770-4aba-8a79-f0768baf4a89.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/59a7321f-5770-4aba-8a79-f0768baf4a89.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/59a7321f-5770-4aba-8a79-f0768baf4a89.jpg'
     ],
     isPromo: true
   },
@@ -67,9 +67,9 @@ export const cars: Car[] = [
     deposit: 35000,
     buyoutMonths: 24,
     images: [
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/5386e136-f36a-4a48-a473-9222f8482ad5.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/5386e136-f36a-4a48-a473-9222f8482ad5.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/5386e136-f36a-4a48-a473-9222f8482ad5.jpg'
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/104e4a89-cfa7-41d6-ab6b-d3ddef38f590.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/104e4a89-cfa7-41d6-ab6b-d3ddef38f590.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/104e4a89-cfa7-41d6-ab6b-d3ddef38f590.jpg'
     ]
   },
   {
@@ -81,9 +81,9 @@ export const cars: Car[] = [
     deposit: 32000,
     buyoutMonths: 24,
     images: [
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/e38d92b8-3346-4e03-809b-d044ae2e80b0.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/e38d92b8-3346-4e03-809b-d044ae2e80b0.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/e38d92b8-3346-4e03-809b-d044ae2e80b0.jpg'
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/d2152d46-5475-4a5e-989f-e26dd22ee1d3.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/d2152d46-5475-4a5e-989f-e26dd22ee1d3.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/d2152d46-5475-4a5e-989f-e26dd22ee1d3.jpg'
     ]
   },
   {
@@ -95,9 +95,9 @@ export const cars: Car[] = [
     deposit: 30000,
     buyoutMonths: 24,
     images: [
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/a95b7a25-700d-4073-bc8e-6034f5e34787.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/a95b7a25-700d-4073-bc8e-6034f5e34787.jpg',
-      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/a95b7a25-700d-4073-bc8e-6034f5e34787.jpg'
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/df5dcf0d-fb2c-466c-a696-7c722b58ee53.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/df5dcf0d-fb2c-466c-a696-7c722b58ee53.jpg',
+      'https://cdn.poehali.dev/projects/d7cbc075-8687-4e85-bb35-1036d3264565/files/df5dcf0d-fb2c-466c-a696-7c722b58ee53.jpg'
     ]
   }
 ];
