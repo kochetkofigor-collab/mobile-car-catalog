@@ -109,7 +109,6 @@ export default function ListingRequestModal({ isOpen, onClose }: ListingRequestM
                     </>
                   ) : (
                     <>
-                      <Icon name="Check" size={18} className="mr-2" />
                       Отправить заявку
                     </>
                   )}
