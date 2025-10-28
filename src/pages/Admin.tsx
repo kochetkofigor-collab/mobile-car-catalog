@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,7 @@ import CarForm from '@/components/admin/CarForm';
 import LessorForm from '@/components/admin/LessorForm';
 
 export default function Admin() {
+  const navigate = useNavigate();
   const [cars, setCars] = useState<Car[]>([]);
   const [landlords, setLandlords] = useState<Landlord[]>([]);
   const [loading, setLoading] = useState(true);
@@ -18,8 +20,13 @@ export default function Admin() {
   const [showLandlordForm, setShowLandlordForm] = useState(false);
 
   useEffect(() => {
+    const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
+    if (!isAuthenticated) {
+      navigate('/login');
+      return;
+    }
     loadData();
-  }, []);
+  }, [navigate]);
 
   const loadData = () => {
     Promise.all([
@@ -106,9 +113,22 @@ export default function Admin() {
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 pb-8">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
         <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center gap-3">
-            <Icon name="Settings" size={24} className="text-primary" />
-            <h1 className="font-cormorant text-3xl font-bold">Панель управления</h1>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <Icon name="Settings" size={24} className="text-primary" />
+              <h1 className="font-cormorant text-3xl font-bold">Панель управления</h1>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                localStorage.removeItem('isAdminAuthenticated');
+                navigate('/login');
+              }}
+            >
+              <Icon name="LogOut" size={16} className="mr-2" />
+              Выйти
+            </Button>
           </div>
         </div>
       </header>
