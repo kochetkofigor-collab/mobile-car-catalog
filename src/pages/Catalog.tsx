@@ -54,9 +54,7 @@ export default function Catalog() {
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 pb-8">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
         <div className="max-w-md mx-auto px-4 py-4">
-          <h1 className="font-cormorant text-3xl font-bold text-center bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-            LUXURY CARS
-          </h1>
+          <h1 className="font-cormorant text-3xl font-bold text-center bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">KEYRIDER</h1>
           <p className="text-center text-sm text-muted-foreground mt-1">Премиальная аренда автомобилей</p>
         </div>
       </header>
