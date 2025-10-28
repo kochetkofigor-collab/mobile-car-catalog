@@ -9,6 +9,7 @@ interface CarFiltersProps {
     priceRange: [number, number];
     brand: string;
     year: string;
+    city: string;
   }) => void;
 }
 
@@ -16,21 +17,27 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([1000, 10000]);
   const [brand, setBrand] = useState('all');
   const [year, setYear] = useState('all');
+  const [city, setCity] = useState('all');
 
   const handlePriceChange = (value: number[]) => {
     const range: [number, number] = [value[0], value[1]];
     setPriceRange(range);
-    onFilterChange({ priceRange: range, brand, year });
+    onFilterChange({ priceRange: range, brand, year, city });
   };
 
   const handleBrandChange = (value: string) => {
     setBrand(value);
-    onFilterChange({ priceRange, brand: value, year });
+    onFilterChange({ priceRange, brand: value, year, city });
   };
 
   const handleYearChange = (value: string) => {
     setYear(value);
-    onFilterChange({ priceRange, brand, year: value });
+    onFilterChange({ priceRange, brand, year: value, city });
+  };
+
+  const handleCityChange = (value: string) => {
+    setCity(value);
+    onFilterChange({ priceRange, brand, year, city: value });
   };
 
   return (
@@ -80,6 +87,26 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <label className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+          <Icon name="MapPin" size={14} />
+          Город
+        </label>
+        <Select value={city} onValueChange={handleCityChange}>
+          <SelectTrigger className="bg-background border-border/40 h-9">
+            <SelectValue placeholder="Город" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Все города</SelectItem>
+            <SelectItem value="Москва">Москва</SelectItem>
+            <SelectItem value="Санкт-Петербург">Санкт-Петербург</SelectItem>
+            <SelectItem value="Казань">Казань</SelectItem>
+            <SelectItem value="Екатеринбург">Екатеринбург</SelectItem>
+            <SelectItem value="Сочи">Сочи</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="space-y-2 pt-1">

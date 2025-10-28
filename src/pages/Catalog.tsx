@@ -12,7 +12,8 @@ export default function Catalog() {
   const [filters, setFilters] = useState({
     priceRange: [1000, 10000] as [number, number],
     brand: 'all',
-    year: 'all'
+    year: 'all',
+    city: 'all'
   });
 
   useEffect(() => {
@@ -32,7 +33,8 @@ export default function Catalog() {
     const priceMatch = car.pricePerDay >= filters.priceRange[0] && car.pricePerDay <= filters.priceRange[1];
     const brandMatch = filters.brand === 'all' || car.brand === filters.brand;
     const yearMatch = filters.year === 'all' || car.year.toString() === filters.year;
-    return priceMatch && brandMatch && yearMatch;
+    const cityMatch = filters.city === 'all' || car.city === filters.city;
+    return priceMatch && brandMatch && yearMatch && cityMatch;
   });
 
   const newCars = filteredCars.filter(car => car.isNew);
