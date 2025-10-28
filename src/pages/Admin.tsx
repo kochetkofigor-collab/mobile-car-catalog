@@ -19,15 +19,7 @@ export default function Admin() {
   const [editingLandlord, setEditingLandlord] = useState<Landlord | null>(null);
   const [showCarForm, setShowCarForm] = useState(false);
   const [showLandlordForm, setShowLandlordForm] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(() => {
-    const saved = localStorage.getItem('adminTheme');
-    return saved ? saved === 'dark' : true;
-  });
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', isDarkMode);
-    localStorage.setItem('adminTheme', isDarkMode ? 'dark' : 'light');
-  }, [isDarkMode]);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
@@ -128,28 +120,18 @@ export default function Admin() {
               <Icon name="Settings" size={20} className="text-primary md:w-6 md:h-6" />
               <h1 className="font-cormorant text-xl md:text-3xl font-bold truncate">Панель управления</h1>
             </div>
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsDarkMode(!isDarkMode)}
-                className="shrink-0"
-              >
-                <Icon name={isDarkMode ? "Sun" : "Moon"} size={16} />
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  localStorage.removeItem('isAdminAuthenticated');
-                  navigate('/login');
-                }}
-                className="shrink-0"
-              >
-                <Icon name="LogOut" size={16} className="md:mr-2" />
-                <span className="hidden md:inline">Выйти</span>
-              </Button>
-            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                localStorage.removeItem('isAdminAuthenticated');
+                navigate('/login');
+              }}
+              className="shrink-0"
+            >
+              <Icon name="LogOut" size={16} className="md:mr-2" />
+              <span className="hidden md:inline">Выйти</span>
+            </Button>
           </div>
         </div>
       </header>

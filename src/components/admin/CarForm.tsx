@@ -31,6 +31,10 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
     isNew: car?.isNew || false,
     isPromo: car?.isPromo || false,
     landlord: car?.landlord || undefined,
+    color: car?.color || '',
+    plateNumber: car?.plateNumber || '',
+    sts: car?.sts || '',
+    vin: car?.vin || '',
   });
 
   useEffect(() => {
@@ -177,6 +181,44 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
               onChange={(e) => handleChange('images', e.target.value.split(',').map(s => s.trim()))}
               placeholder="https://..., https://..."
             />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">Цвет</label>
+              <Input
+                value={formData.color}
+                onChange={(e) => handleChange('color', e.target.value)}
+                placeholder="Черный"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">Гос. номер</label>
+              <Input
+                value={formData.plateNumber}
+                onChange={(e) => handleChange('plateNumber', e.target.value)}
+                placeholder="А123БВ777"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium mb-2">СТС</label>
+              <Input
+                value={formData.sts}
+                onChange={(e) => handleChange('sts', e.target.value)}
+                placeholder="7777 123456"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-2">VIN</label>
+              <Input
+                value={formData.vin}
+                onChange={(e) => handleChange('vin', e.target.value)}
+                placeholder="WBADT43452G123456"
+              />
+            </div>
           </div>
 
           <div className="flex gap-4">

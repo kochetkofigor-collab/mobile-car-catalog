@@ -20,6 +20,10 @@ export interface Car {
   isNew?: boolean;
   isPromo?: boolean;
   landlord?: Landlord;
+  color?: string;
+  plateNumber?: string;
+  sts?: string;
+  vin?: string;
 }
 
 export const cars: Car[] = [
