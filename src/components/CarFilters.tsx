@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
@@ -13,11 +13,24 @@ interface CarFiltersProps {
   }) => void;
 }
 
+interface City {
+  id: number;
+  name: string;
+}
+
 export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([1000, 10000]);
   const [brand, setBrand] = useState('all');
   const [year, setYear] = useState('all');
   const [city, setCity] = useState('all');
+  const [cities, setCities] = useState<City[]>([]);
+
+  useEffect(() => {
+    fetch('https://functions.poehali.dev/98f72ddd-b05e-4e9e-96a6-ddb57c179216')
+      .then(r => r.json())
+      .then(data => setCities(data))
+      .catch(err => console.error('Failed to load cities:', err));
+  }, []);
 
   const handlePriceChange = (value: number[]) => {
     const range: [number, number] = [value[0], value[1]];
@@ -100,11 +113,9 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">Все города</SelectItem>
-            <SelectItem value="Москва">Москва</SelectItem>
-            <SelectItem value="Санкт-Петербург">Санкт-Петербург</SelectItem>
-            <SelectItem value="Казань">Казань</SelectItem>
-            <SelectItem value="Екатеринбург">Екатеринбург</SelectItem>
-            <SelectItem value="Сочи">Сочи</SelectItem>
+            {cities.map(city => (
+              <SelectItem key={city.id} value={city.name}>{city.name}</SelectItem>
+            ))}
           </SelectContent>
         </Select>
       </div>
