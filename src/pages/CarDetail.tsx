@@ -58,6 +58,10 @@ export default function CarDetail() {
             className="w-full h-full object-cover"
           />
           
+          <div className="absolute top-3 left-3">
+            <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-foreground font-medium border border-border/40">Москва</span>
+          </div>
+          
           {car.images.length > 1 && (
             <>
               <button
@@ -101,7 +105,7 @@ export default function CarDetail() {
         <Card className="p-5 space-y-4 border-border/40 bg-card/50 backdrop-blur-sm animate-fade-in">
           <div>
             <h2 className="font-cormorant text-2xl font-bold mb-1">{car.name}</h2>
-            <p className="text-muted-foreground">{car.year} год • <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">Москва</span></p>
+            <p className="text-muted-foreground">{car.year} год</p>
           </div>
 
           <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border/40">
