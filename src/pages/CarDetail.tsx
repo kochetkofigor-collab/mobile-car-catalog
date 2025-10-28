@@ -44,7 +44,7 @@ export default function CarDetail() {
           >
             <Icon name="ArrowLeft" size={20} className="text-foreground" />
           </Button>
-          <h1 className="font-cormorant text-2xl font-bold flex-1">
+          <h1 className="font-cormorant font-bold flex-1 text-base">
             {car.name}
           </h1>
         </div>
