@@ -15,8 +15,7 @@ export default function Catalog() {
     priceRange: [1000, 10000] as [number, number],
     brand: 'all',
     year: 'all',
-    city: 'all',
-    comingSoon: false
+    city: 'all'
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -38,8 +37,7 @@ export default function Catalog() {
     const brandMatch = filters.brand === 'all' || car.brand === filters.brand;
     const yearMatch = filters.year === 'all' || car.year.toString() === filters.year;
     const cityMatch = filters.city === 'all' || car.city === filters.city;
-    const comingSoonMatch = !filters.comingSoon || car.comingSoonDate;
-    return priceMatch && brandMatch && yearMatch && cityMatch && comingSoonMatch;
+    return priceMatch && brandMatch && yearMatch && cityMatch;
   });
 
   const newCars = filteredCars.filter(car => car.isNew);
