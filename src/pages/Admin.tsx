@@ -19,6 +19,15 @@ export default function Admin() {
   const [editingLandlord, setEditingLandlord] = useState<Landlord | null>(null);
   const [showCarForm, setShowCarForm] = useState(false);
   const [showLandlordForm, setShowLandlordForm] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(() => {
+    const saved = localStorage.getItem('adminTheme');
+    return saved ? saved === 'dark' : true;
+  });
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    localStorage.setItem('adminTheme', isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
 
   useEffect(() => {
     const isAuthenticated = localStorage.getItem('isAdminAuthenticated');
@@ -113,67 +122,97 @@ export default function Admin() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 pb-8">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
-        <div className="max-w-6xl mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Icon name="Settings" size={24} className="text-primary" />
-              <h1 className="font-cormorant text-3xl font-bold">Панель управления</h1>
+        <div className="max-w-6xl mx-auto px-4 py-3 md:py-4">
+          <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2 md:gap-3">
+              <Icon name="Settings" size={20} className="text-primary md:w-6 md:h-6" />
+              <h1 className="font-cormorant text-xl md:text-3xl font-bold truncate">Панель управления</h1>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                localStorage.removeItem('isAdminAuthenticated');
-                navigate('/login');
-              }}
-            >
-              <Icon name="LogOut" size={16} className="mr-2" />
-              Выйти
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsDarkMode(!isDarkMode)}
+                className="shrink-0"
+              >
+                <Icon name={isDarkMode ? "Sun" : "Moon"} size={16} />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  localStorage.removeItem('isAdminAuthenticated');
+                  navigate('/login');
+                }}
+                className="shrink-0"
+              >
+                <Icon name="LogOut" size={16} className="md:mr-2" />
+                <span className="hidden md:inline">Выйти</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
 
-      <div className="max-w-6xl mx-auto px-4 mt-6">
-        <Tabs defaultValue="cars" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 max-w-2xl">
-            <TabsTrigger value="cars">Автомобили ({cars.length})</TabsTrigger>
-            <TabsTrigger value="landlords">Арендодатели ({landlords.length})</TabsTrigger>
-            <TabsTrigger value="cities">Города</TabsTrigger>
+      <div className="max-w-6xl mx-auto px-4 mt-4 md:mt-6">
+        <Tabs defaultValue="cars" className="space-y-4 md:space-y-6">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="cars" className="text-xs md:text-sm">
+              <span className="hidden sm:inline">Автомобили</span>
+              <span className="sm:hidden">Авто</span>
+              <span className="ml-1">({cars.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="landlords" className="text-xs md:text-sm">
+              <span className="hidden sm:inline">Арендодатели</span>
+              <span className="sm:hidden">Аренда</span>
+              <span className="ml-1">({landlords.length})</span>
+            </TabsTrigger>
+            <TabsTrigger value="cities" className="text-xs md:text-sm">Города</TabsTrigger>
           </TabsList>
 
           <TabsContent value="cars" className="space-y-4">
-            <Card className="p-6">
-              <h2 className="font-cormorant text-2xl font-semibold mb-4">Управление автомобилями</h2>
+            <Card className="p-4 md:p-6">
+              <h2 className="font-cormorant text-xl md:text-2xl font-semibold mb-4">Управление автомобилями</h2>
               <div className="space-y-3">
                 {cars.map(car => (
-                  <Card key={car.id} className="p-4 hover:border-primary/50 transition-all">
-                    <div className="flex items-center gap-4">
+                  <Card key={car.id} className="p-3 md:p-4 hover:border-primary/50 transition-all">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
                       <img 
                         src={car.images[0]} 
                         alt={car.name}
-                        className="w-24 h-16 object-cover rounded"
+                        className="w-full sm:w-24 h-32 sm:h-16 object-cover rounded"
                       />
-                      <div className="flex-1">
-                        <h3 className="font-semibold">{car.name}</h3>
+                      <div className="flex-1 min-w-0 w-full">
+                        <h3 className="font-semibold truncate">{car.name}</h3>
                         <p className="text-sm text-muted-foreground">
-                          {car.year} • {car.city} • {car.pricePerDay.toLocaleString('ru-RU')} ₽/сутки
+                          {car.year} • {car.city}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {car.pricePerDay.toLocaleString('ru-RU')} ₽/сутки
                         </p>
                         {car.landlord && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            Арендодатель: {car.landlord.name}
+                          <p className="text-xs text-muted-foreground mt-1 truncate">
+                            {car.landlord.name}
                           </p>
                         )}
+                        <div className="flex gap-2 mt-2 sm:hidden">
+                          {car.isNew && (
+                            <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded">Новинка</span>
+                          )}
+                          {car.isPromo && (
+                            <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs rounded">Акция</span>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="hidden sm:flex gap-2">
                         {car.isNew && (
-                          <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded">Новинка</span>
+                          <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded whitespace-nowrap">Новинка</span>
                         )}
                         {car.isPromo && (
-                          <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs rounded">Акция</span>
+                          <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs rounded whitespace-nowrap">Акция</span>
                         )}
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 w-full sm:w-auto">
                         <Button 
                           variant="outline" 
                           size="sm"
@@ -181,9 +220,10 @@ export default function Admin() {
                             setEditingCar(car);
                             setShowCarForm(true);
                           }}
+                          className="flex-1 sm:flex-none"
                         >
-                          <Icon name="Pencil" size={16} className="mr-1" />
-                          Редактировать
+                          <Icon name="Pencil" size={16} className="sm:mr-1" />
+                          <span className="hidden sm:inline">Редактировать</span>
                         </Button>
                         <Button 
                           variant="destructive" 
@@ -211,35 +251,35 @@ export default function Admin() {
           </TabsContent>
 
           <TabsContent value="landlords" className="space-y-4">
-            <Card className="p-6">
-              <h2 className="font-cormorant text-2xl font-semibold mb-4">Управление арендодателями</h2>
+            <Card className="p-4 md:p-6">
+              <h2 className="font-cormorant text-xl md:text-2xl font-semibold mb-4">Управление арендодателями</h2>
               <div className="space-y-3">
                 {landlords.map(landlord => (
-                  <Card key={landlord.id} className="p-4 hover:border-primary/50 transition-all">
-                    <div className="flex items-center gap-4">
+                  <Card key={landlord.id} className="p-3 md:p-4 hover:border-primary/50 transition-all">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
                       <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
                         <Icon name="User" size={24} className="text-primary" />
                       </div>
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0 w-full">
                         <div className="flex items-center gap-2">
-                          <h3 className="font-semibold">{landlord.name}</h3>
+                          <h3 className="font-semibold truncate">{landlord.name}</h3>
                           {landlord.isVerified && (
-                            <Icon name="BadgeCheck" size={16} className="text-primary" />
+                            <Icon name="BadgeCheck" size={16} className="text-primary flex-shrink-0" />
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground truncate">
                           {landlord.phone}
                         </p>
-                        <div className="flex gap-2 mt-1">
+                        <div className="flex flex-col sm:flex-row gap-1 sm:gap-2 mt-1">
                           {landlord.whatsapp && (
-                            <span className="text-xs text-muted-foreground">WhatsApp: {landlord.whatsapp}</span>
+                            <span className="text-xs text-muted-foreground truncate">WhatsApp: {landlord.whatsapp}</span>
                           )}
                           {landlord.telegram && (
-                            <span className="text-xs text-muted-foreground">Telegram: @{landlord.telegram}</span>
+                            <span className="text-xs text-muted-foreground truncate">Telegram: @{landlord.telegram}</span>
                           )}
                         </div>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 w-full sm:w-auto">
                         <Button 
                           variant="outline" 
                           size="sm"
@@ -247,9 +287,10 @@ export default function Admin() {
                             setEditingLandlord(landlord);
                             setShowLandlordForm(true);
                           }}
+                          className="flex-1 sm:flex-none"
                         >
-                          <Icon name="Pencil" size={16} className="mr-1" />
-                          Редактировать
+                          <Icon name="Pencil" size={16} className="sm:mr-1" />
+                          <span className="hidden sm:inline">Редактировать</span>
                         </Button>
                         <Button 
                           variant="destructive" 
@@ -281,12 +322,12 @@ export default function Admin() {
           </TabsContent>
         </Tabs>
 
-        <Card className="p-6 mt-6 border-primary/30 bg-primary/5">
+        <Card className="p-4 md:p-6 mt-4 md:mt-6 border-primary/30 bg-primary/5">
           <div className="flex items-start gap-3">
-            <Icon name="Info" size={20} className="text-primary mt-0.5" />
+            <Icon name="Info" size={20} className="text-primary mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="font-semibold mb-1">Информация</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold mb-1 text-sm md:text-base">Информация</h3>
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Здесь вы можете управлять автомобилями и арендодателями. Все изменения сохраняются в базе данных.
               </p>
             </div>
