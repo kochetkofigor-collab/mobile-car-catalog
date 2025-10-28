@@ -5,34 +5,70 @@ import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { Car, Landlord } from '@/data/cars';
+import CarForm from '@/components/admin/CarForm';
+import LessorForm from '@/components/admin/LessorForm';
 
 export default function Admin() {
   const [cars, setCars] = useState<Car[]>([]);
   const [landlords, setLandlords] = useState<Landlord[]>([]);
   const [loading, setLoading] = useState(true);
+  const [editingCar, setEditingCar] = useState<Car | null>(null);
+  const [editingLandlord, setEditingLandlord] = useState<Landlord | null>(null);
+  const [showCarForm, setShowCarForm] = useState(false);
+  const [showLandlordForm, setShowLandlordForm] = useState(false);
 
   useEffect(() => {
     loadData();
   }, []);
 
   const loadData = () => {
-    fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb')
-      .then(res => res.json())
-      .then(data => {
-        setCars(data);
-        const uniqueLandlords = data
-          .filter((car: Car) => car.landlord)
-          .map((car: Car) => car.landlord)
-          .filter((landlord: Landlord | undefined, index: number, self: (Landlord | undefined)[]) => 
-            landlord && self.findIndex((l) => l?.id === landlord.id) === index
-          ) as Landlord[];
-        setLandlords(uniqueLandlords);
+    Promise.all([
+      fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb').then(r => r.json()),
+      fetch('https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73').then(r => r.json())
+    ])
+      .then(([carsData, landlordsData]) => {
+        setCars(carsData);
+        setLandlords(landlordsData);
         setLoading(false);
       })
       .catch(err => {
         console.error('Failed to load data:', err);
         setLoading(false);
       });
+  };
+
+  const handleSaveCar = (carData: Partial<Car>) => {
+    const method = editingCar ? 'PUT' : 'POST';
+    const body = editingCar ? { ...carData, id: editingCar.id } : carData;
+
+    fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb', {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+      .then(() => {
+        loadData();
+        setShowCarForm(false);
+        setEditingCar(null);
+      })
+      .catch(err => console.error('Failed to save car:', err));
+  };
+
+  const handleSaveLandlord = (landlordData: Partial<Landlord>) => {
+    const method = editingLandlord ? 'PUT' : 'POST';
+    const body = editingLandlord ? { ...landlordData, id: editingLandlord.id } : landlordData;
+
+    fetch('https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73', {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    })
+      .then(() => {
+        loadData();
+        setShowLandlordForm(false);
+        setEditingLandlord(null);
+      })
+      .catch(err => console.error('Failed to save landlord:', err));
   };
 
   if (loading) {
@@ -103,7 +139,13 @@ export default function Admin() {
                   </Card>
                 ))}
               </div>
-              <Button className="mt-4 w-full">
+              <Button 
+                className="mt-4 w-full"
+                onClick={() => {
+                  setEditingCar(null);
+                  setShowCarForm(true);
+                }}
+              >
                 <Icon name="Plus" size={18} className="mr-2" />
                 Добавить автомобиль
               </Button>
@@ -139,7 +181,14 @@ export default function Admin() {
                           )}
                         </div>
                       </div>
-                      <Button variant="outline" size="sm">
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => {
+                          setEditingLandlord(landlord);
+                          setShowLandlordForm(true);
+                        }}
+                      >
                         <Icon name="Pencil" size={16} className="mr-1" />
                         Редактировать
                       </Button>
@@ -147,7 +196,13 @@ export default function Admin() {
                   </Card>
                 ))}
               </div>
-              <Button className="mt-4 w-full">
+              <Button 
+                className="mt-4 w-full"
+                onClick={() => {
+                  setEditingLandlord(null);
+                  setShowLandlordForm(true);
+                }}
+              >
                 <Icon name="Plus" size={18} className="mr-2" />
                 Добавить арендодателя
               </Button>
@@ -167,6 +222,28 @@ export default function Admin() {
           </div>
         </Card>
       </div>
+
+      {showCarForm && (
+        <CarForm
+          car={editingCar || undefined}
+          onSave={handleSaveCar}
+          onCancel={() => {
+            setShowCarForm(false);
+            setEditingCar(null);
+          }}
+        />
+      )}
+
+      {showLandlordForm && (
+        <LessorForm
+          lessor={editingLandlord || undefined}
+          onSave={handleSaveLandlord}
+          onCancel={() => {
+            setShowLandlordForm(false);
+            setEditingLandlord(null);
+          }}
+        />
+      )}
     </div>
   );
 }

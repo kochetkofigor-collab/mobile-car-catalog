@@ -1,7 +1,7 @@
 {
   "tests": [
     {
-      "name": "Get all cars",
+      "name": "Get all landlords",
       "method": "GET",
       "path": "/",
       "expectedStatus": 200,

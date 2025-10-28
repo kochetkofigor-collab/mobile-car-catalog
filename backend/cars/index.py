@@ -4,12 +4,117 @@ import psycopg2
 from psycopg2.extras import RealDictCursor
 from typing import Dict, Any
 
+def create_car(event: Dict[str, Any]) -> Dict[str, Any]:
+    body_data = json.loads(event.get('body', '{}'))
+    database_url = os.environ.get('DATABASE_URL')
+    
+    conn = psycopg2.connect(database_url)
+    cur = conn.cursor(cursor_factory=RealDictCursor)
+    
+    cur.execute('''
+        INSERT INTO t_p20454517_mobile_car_catalog.cars 
+        (name, brand, year, price_per_day, deposit, buyout_months, images, city, is_new, is_promo, landlord_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        RETURNING id
+    ''', (
+        body_data.get('name'),
+        body_data.get('brand'),
+        body_data.get('year'),
+        body_data.get('pricePerDay'),
+        body_data.get('deposit', 0),
+        body_data.get('buyoutMonths', 0),
+        body_data.get('images', []),
+        body_data.get('city', ''),
+        body_data.get('isNew', False),
+        body_data.get('isPromo', False),
+        body_data.get('landlord_id')
+    ))
+    
+    result = cur.fetchone()
+    conn.commit()
+    cur.close()
+    conn.close()
+    
+    return {
+        'statusCode': 201,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        'body': json.dumps({'id': result['id'], 'message': 'Car created'})
+    }
+
+def update_car(event: Dict[str, Any]) -> Dict[str, Any]:
+    body_data = json.loads(event.get('body', '{}'))
+    car_id = body_data.get('id')
+    database_url = os.environ.get('DATABASE_URL')
+    
+    conn = psycopg2.connect(database_url)
+    cur = conn.cursor()
+    
+    cur.execute('''
+        UPDATE t_p20454517_mobile_car_catalog.cars
+        SET name = %s, brand = %s, year = %s, price_per_day = %s,
+            deposit = %s, buyout_months = %s, images = %s, city = %s,
+            is_new = %s, is_promo = %s, landlord_id = %s
+        WHERE id = %s
+    ''', (
+        body_data.get('name'),
+        body_data.get('brand'),
+        body_data.get('year'),
+        body_data.get('pricePerDay'),
+        body_data.get('deposit', 0),
+        body_data.get('buyoutMonths', 0),
+        body_data.get('images', []),
+        body_data.get('city', ''),
+        body_data.get('isNew', False),
+        body_data.get('isPromo', False),
+        body_data.get('landlord_id'),
+        car_id
+    ))
+    
+    conn.commit()
+    cur.close()
+    conn.close()
+    
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        'body': json.dumps({'message': 'Car updated'})
+    }
+
+def delete_car(event: Dict[str, Any]) -> Dict[str, Any]:
+    params = event.get('queryStringParameters', {})
+    car_id = params.get('id')
+    database_url = os.environ.get('DATABASE_URL')
+    
+    conn = psycopg2.connect(database_url)
+    cur = conn.cursor()
+    
+    cur.execute('DELETE FROM t_p20454517_mobile_car_catalog.cars WHERE id = %s', (car_id,))
+    
+    conn.commit()
+    cur.close()
+    conn.close()
+    
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
+        'body': json.dumps({'message': 'Car deleted'})
+    }
+
 def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     '''
-    Business: Get all cars from database
-    Args: event - dict with httpMethod
+    Business: CRUD operations for cars
+    Args: event - dict with httpMethod, body, pathParams
           context - object with request_id
-    Returns: HTTP response with cars list
+    Returns: HTTP response with cars data
     '''
     method: str = event.get('httpMethod', 'GET')
     
@@ -18,12 +123,21 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Methods': 'GET, OPTIONS',
+                'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
                 'Access-Control-Allow-Headers': 'Content-Type',
                 'Access-Control-Max-Age': '86400'
             },
             'body': ''
         }
+    
+    if method == 'POST':
+        return create_car(event)
+    
+    if method == 'PUT':
+        return update_car(event)
+    
+    if method == 'DELETE':
+        return delete_car(event)
     
     if method != 'GET':
         return {
