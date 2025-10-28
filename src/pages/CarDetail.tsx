@@ -12,6 +12,9 @@ export default function CarDetail() {
   const [car, setCar] = useState<Car | null>(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isImageModalOpen, setIsImageModalOpen] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
   useEffect(() => {
     fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb')
@@ -58,6 +61,29 @@ export default function CarDetail() {
     setCurrentImageIndex((prev) => (prev - 1 + car.images.length) % car.images.length);
   };
 
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+    
+    if (isLeftSwipe) {
+      nextImage();
+    }
+    if (isRightSwipe) {
+      prevImage();
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 pb-8">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
@@ -77,11 +103,17 @@ export default function CarDetail() {
       </header>
 
       <div className="max-w-md mx-auto px-4 space-y-6 mt-6">
-        <div className="relative aspect-[16/10] overflow-hidden rounded-xl bg-muted/30 animate-fade-in">
+        <div 
+          className="relative aspect-[16/10] overflow-hidden rounded-xl bg-muted/30 animate-fade-in"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <img
             src={car.images[currentImageIndex]}
             alt={car.name}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover cursor-pointer"
+            onClick={() => setIsImageModalOpen(true)}
           />
           
           <div className="absolute top-3 left-3">
@@ -214,6 +246,64 @@ export default function CarDetail() {
           </Card>
         )}
       </div>
+
+      {isImageModalOpen && (
+        <div 
+          className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setIsImageModalOpen(false)}
+        >
+          <button
+            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all"
+            onClick={() => setIsImageModalOpen(false)}
+          >
+            <Icon name="X" size={24} className="text-white" />
+          </button>
+          
+          <div 
+            className="relative w-full max-w-4xl aspect-[16/10]"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={car.images[currentImageIndex]}
+              alt={car.name}
+              className="w-full h-full object-contain"
+            />
+            
+            {car.images.length > 1 && (
+              <>
+                <button
+                  onClick={(e) => { e.stopPropagation(); prevImage(); }}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all"
+                >
+                  <Icon name="ChevronLeft" size={24} className="text-white" />
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); nextImage(); }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-all"
+                >
+                  <Icon name="ChevronRight" size={24} className="text-white" />
+                </button>
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                  {car.images.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={(e) => { e.stopPropagation(); setCurrentImageIndex(index); }}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        index === currentImageIndex
+                          ? 'bg-white w-6'
+                          : 'bg-white/50 hover:bg-white/80'
+                      }`}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
