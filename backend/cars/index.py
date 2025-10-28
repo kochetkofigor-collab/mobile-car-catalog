@@ -42,10 +42,14 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     cur.execute('''
         SELECT 
-            id, name, brand, year, price_per_day, deposit, 
-            buyout_months, images, city, is_new, is_promo
-        FROM t_p20454517_mobile_car_catalog.cars
-        ORDER BY id
+            c.id, c.name, c.brand, c.year, c.price_per_day, c.deposit, 
+            c.buyout_months, c.images, c.city, c.is_new, c.is_promo,
+            l.id as landlord_id, l.name as landlord_name, l.phone as landlord_phone,
+            l.whatsapp as landlord_whatsapp, l.telegram as landlord_telegram,
+            l.is_verified as landlord_verified
+        FROM t_p20454517_mobile_car_catalog.cars c
+        LEFT JOIN t_p20454517_mobile_car_catalog.landlords l ON c.landlord_id = l.id
+        ORDER BY c.id
     ''')
     
     rows = cur.fetchall()
@@ -54,7 +58,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     
     cars = []
     for row in rows:
-        cars.append({
+        car_data = {
             'id': row['id'],
             'name': row['name'],
             'brand': row['brand'],
@@ -66,7 +70,19 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'city': row['city'],
             'isNew': row['is_new'],
             'isPromo': row['is_promo']
-        })
+        }
+        
+        if row['landlord_id']:
+            car_data['landlord'] = {
+                'id': row['landlord_id'],
+                'name': row['landlord_name'],
+                'phone': row['landlord_phone'],
+                'whatsapp': row['landlord_whatsapp'],
+                'telegram': row['landlord_telegram'],
+                'isVerified': row['landlord_verified']
+            }
+        
+        cars.append(car_data)
     
     return {
         'statusCode': 200,

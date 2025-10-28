@@ -159,50 +159,60 @@ export default function CarDetail() {
           </div>
         </Card>
 
-        <Card className="p-5 space-y-3 border-primary/30 bg-primary/5 animate-fade-in">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
-              <Icon name="ShieldCheck" size={20} className="text-primary" />
+        {car.landlord?.isVerified && (
+          <Card className="p-5 space-y-3 border-primary/30 bg-primary/5 animate-fade-in">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                <Icon name="ShieldCheck" size={20} className="text-primary" />
+              </div>
+              <div className="flex-1">
+                <h3 className="font-semibold mb-1">Проверенный арендодатель</h3>
+                <p className="text-sm text-muted-foreground">
+                  Мы проверили документы и репутацию арендодателя. Безопасная сделка гарантирована.
+                </p>
+              </div>
             </div>
-            <div className="flex-1">
-              <h3 className="font-semibold mb-1">Проверенный арендодатель</h3>
-              <p className="text-sm text-muted-foreground">
-                Мы проверили документы и репутацию арендодателя. Безопасная сделка гарантирована.
-              </p>
-            </div>
-          </div>
-        </Card>
+          </Card>
+        )}
 
-        <Card className="p-5 space-y-4 border-border/40 bg-card/50 backdrop-blur-sm animate-fade-in">
-          <h3 className="font-cormorant text-xl font-semibold flex items-center gap-2">
-            <Icon name="MessageCircle" size={20} className="text-primary" />
-            Связаться с арендодателем
-          </h3>
-          <div className="space-y-3">
-            <Button
-              className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
-              onClick={() => window.open('https://wa.me/79999999999', '_blank')}
-            >
-              <Icon name="MessageCircle" size={18} className="mr-2" />
-              WhatsApp
-            </Button>
-            <Button
-              className="w-full bg-[#0088cc] hover:bg-[#0077b3] text-white"
-              onClick={() => window.open('https://t.me/username', '_blank')}
-            >
-              <Icon name="Send" size={18} className="mr-2" />
-              Telegram
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full border-primary/30 hover:bg-primary/10 hover:text-white [&_svg]:hover:text-white active:bg-primary active:text-white active:border-primary [&_svg]:active:text-white"
-              onClick={() => window.open('tel:+79999999999', '_blank')}
-            >
-              <Icon name="Phone" size={18} className="mr-2" />
-              +7 (999) 999-99-99
-            </Button>
-          </div>
-        </Card>
+        {car.landlord && (
+          <Card className="p-5 space-y-4 border-border/40 bg-card/50 backdrop-blur-sm animate-fade-in">
+            <h3 className="font-cormorant text-xl font-semibold flex items-center gap-2">
+              <Icon name="MessageCircle" size={20} className="text-primary" />
+              Связаться с {car.landlord.name}
+            </h3>
+            <div className="space-y-3">
+              {car.landlord.whatsapp && (
+                <Button
+                  className="w-full bg-[#25D366] hover:bg-[#20BA5A] text-white"
+                  onClick={() => window.open(`https://wa.me/${car.landlord?.whatsapp}`, '_blank')}
+                >
+                  <Icon name="MessageCircle" size={18} className="mr-2" />
+                  WhatsApp
+                </Button>
+              )}
+              {car.landlord.telegram && (
+                <Button
+                  className="w-full bg-[#0088cc] hover:bg-[#0077b3] text-white"
+                  onClick={() => window.open(`https://t.me/${car.landlord?.telegram}`, '_blank')}
+                >
+                  <Icon name="Send" size={18} className="mr-2" />
+                  Telegram
+                </Button>
+              )}
+              {car.landlord.phone && (
+                <Button
+                  variant="outline"
+                  className="w-full border-primary/30 hover:bg-primary/10 hover:text-white [&_svg]:hover:text-white active:bg-primary active:text-white active:border-primary [&_svg]:active:text-white"
+                  onClick={() => window.open(`tel:${car.landlord?.phone}`, '_blank')}
+                >
+                  <Icon name="Phone" size={18} className="mr-2" />
+                  {car.landlord.phone}
+                </Button>
+              )}
+            </div>
+          </Card>
+        )}
       </div>
     </div>
   );

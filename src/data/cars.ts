@@ -1,3 +1,12 @@
+export interface Landlord {
+  id: number;
+  name: string;
+  phone: string;
+  whatsapp?: string;
+  telegram?: string;
+  isVerified: boolean;
+}
+
 export interface Car {
   id: number;
   name: string;
@@ -10,6 +19,7 @@ export interface Car {
   city: string;
   isNew?: boolean;
   isPromo?: boolean;
+  landlord?: Landlord;
 }
 
 export const cars: Car[] = [
