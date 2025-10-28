@@ -11,7 +11,13 @@ interface CarFormProps {
   onCancel: () => void;
 }
 
+interface City {
+  id: number;
+  name: string;
+}
+
 export default function CarForm({ car, onSave, onCancel }: CarFormProps) {
+  const [cities, setCities] = useState<City[]>([]);
   const [formData, setFormData] = useState<Partial<Car>>({
     name: car?.name || '',
     brand: car?.brand || '',
@@ -24,6 +30,13 @@ export default function CarForm({ car, onSave, onCancel }: CarFormProps) {
     isNew: car?.isNew || false,
     isPromo: car?.isPromo || false,
   });
+
+  useEffect(() => {
+    fetch('https://functions.poehali.dev/98f72ddd-b05e-4e9e-96a6-ddb57c179216')
+      .then(r => r.json())
+      .then(data => setCities(data))
+      .catch(err => console.error('Failed to load cities:', err));
+  }, []);
 
   useEffect(() => {
     if (car) {
@@ -121,11 +134,9 @@ export default function CarForm({ car, onSave, onCancel }: CarFormProps) {
                 <SelectValue placeholder="Выберите город" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Москва">Москва</SelectItem>
-                <SelectItem value="Санкт-Петербург">Санкт-Петербург</SelectItem>
-                <SelectItem value="Казань">Казань</SelectItem>
-                <SelectItem value="Екатеринбург">Екатеринбург</SelectItem>
-                <SelectItem value="Сочи">Сочи</SelectItem>
+                {cities.map(city => (
+                  <SelectItem key={city.id} value={city.name}>{city.name}</SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>

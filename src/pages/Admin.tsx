@@ -8,6 +8,7 @@ import Icon from '@/components/ui/icon';
 import { Car, Landlord } from '@/data/cars';
 import CarForm from '@/components/admin/CarForm';
 import LessorForm from '@/components/admin/LessorForm';
+import CityManagement from '@/components/admin/CityManagement';
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -135,9 +136,10 @@ export default function Admin() {
 
       <div className="max-w-6xl mx-auto px-4 mt-6">
         <Tabs defaultValue="cars" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-2 max-w-md">
+          <TabsList className="grid w-full grid-cols-3 max-w-2xl">
             <TabsTrigger value="cars">Автомобили ({cars.length})</TabsTrigger>
             <TabsTrigger value="landlords">Арендодатели ({landlords.length})</TabsTrigger>
+            <TabsTrigger value="cities">Города</TabsTrigger>
           </TabsList>
 
           <TabsContent value="cars" className="space-y-4">
@@ -272,6 +274,10 @@ export default function Admin() {
                 Добавить арендодателя
               </Button>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="cities" className="space-y-4">
+            <CityManagement />
           </TabsContent>
         </Tabs>
 
