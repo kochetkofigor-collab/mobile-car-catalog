@@ -175,14 +175,7 @@ export default function Admin() {
               <h2 className="font-cormorant text-xl md:text-2xl font-semibold mb-4">Управление автомобилями</h2>
               <div className="space-y-3">
                 {cars.map(car => (
-                  <Card 
-                    key={car.id} 
-                    className={`p-3 md:p-4 transition-all ${
-                      editingCar?.id === car.id 
-                        ? 'border-primary shadow-lg shadow-primary/20 ring-2 ring-primary/30' 
-                        : 'hover:border-primary/50'
-                    }`}
-                  >
+                  <Card key={car.id} className="p-3 md:p-4 hover:border-primary/50 transition-all">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
                       <img 
                         src={car.images[0]} 
@@ -219,7 +212,7 @@ export default function Admin() {
                           <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs rounded whitespace-nowrap">Акция</span>
                         )}
                       </div>
-                      <div className="flex gap-2 w-full sm:w-auto">
+                      <div className="flex gap-2 w-full sm:w-auto flex-wrap">
                         <Button 
                           variant="outline" 
                           size="sm"
@@ -231,6 +224,24 @@ export default function Admin() {
                         >
                           <Icon name="Pencil" size={16} className="sm:mr-1" />
                           <span className="hidden sm:inline">Редактировать</span>
+                        </Button>
+                        <Button 
+                          variant={car.isHighlighted ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => {
+                            const updatedCar = { ...car, isHighlighted: !car.isHighlighted };
+                            fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb', {
+                              method: 'PUT',
+                              headers: { 'Content-Type': 'application/json' },
+                              body: JSON.stringify(updatedCar)
+                            })
+                              .then(() => loadData())
+                              .catch(err => console.error('Failed to update highlight:', err));
+                          }}
+                          className="flex-1 sm:flex-none"
+                        >
+                          <Icon name="Zap" size={16} className="sm:mr-1" />
+                          <span className="hidden sm:inline">{car.isHighlighted ? 'Убрать' : 'Выделить'}</span>
                         </Button>
                         <Button 
                           variant="destructive" 

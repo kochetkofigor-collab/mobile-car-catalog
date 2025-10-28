@@ -12,13 +12,18 @@ interface CarCardProps {
   isNew?: boolean;
   isPromo?: boolean;
   isVerified?: boolean;
+  isHighlighted?: boolean;
   onClick: () => void;
 }
 
-export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, isVerified, onClick }: CarCardProps) => {
+export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, isVerified, isHighlighted, onClick }: CarCardProps) => {
   return (
     <Card 
-      className="overflow-hidden border-border/40 bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer animate-fade-in hover:scale-[1.02]"
+      className={`overflow-hidden bg-card transition-all duration-300 cursor-pointer animate-fade-in hover:scale-[1.02] ${
+        isHighlighted 
+          ? 'border-2 border-primary shadow-xl shadow-primary/30 ring-4 ring-primary/20' 
+          : 'border-border/40 hover:border-primary/50'
+      }`}
       onClick={onClick}
     >
       <div className="relative aspect-[16/10] overflow-hidden bg-muted/30">

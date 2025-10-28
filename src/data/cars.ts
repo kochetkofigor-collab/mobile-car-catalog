@@ -24,6 +24,7 @@ export interface Car {
   plateNumber?: string;
   sts?: string;
   vin?: string;
+  isHighlighted?: boolean;
 }
 
 export const cars: Car[] = [
