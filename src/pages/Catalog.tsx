@@ -53,11 +53,17 @@ export default function Catalog() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 pb-8">
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
-        <div className="max-w-md mx-auto px-4 py-4">
+        <div className="max-w-md mx-auto px-4 py-4 relative">
           <h1 className="font-cormorant text-3xl font-bold text-center bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
             LUXURY CARS
           </h1>
           <p className="text-center text-sm text-muted-foreground mt-1">Премиальная аренда автомобилей</p>
+          <button
+            onClick={() => navigate('/admin')}
+            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 hover:bg-primary/10 rounded-full transition-all"
+          >
+            <Icon name="Settings" size={20} className="text-muted-foreground" />
+          </button>
         </div>
       </header>
 
