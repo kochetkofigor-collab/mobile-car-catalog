@@ -101,7 +101,7 @@ export default function CarDetail() {
         <Card className="p-5 space-y-4 border-border/40 bg-card/50 backdrop-blur-sm animate-fade-in">
           <div>
             <h2 className="font-cormorant text-2xl font-bold mb-1">{car.name}</h2>
-            <p className="text-muted-foreground">{car.year} год</p>
+            <p className="text-muted-foreground">{car.year} год • Москва</p>
           </div>
 
           <div className="grid grid-cols-3 gap-4 pt-4 border-t border-border/40">
