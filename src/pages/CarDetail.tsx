@@ -40,9 +40,9 @@ export default function CarDetail() {
             variant="ghost"
             size="icon"
             onClick={() => navigate('/')}
-            className="hover:bg-primary/10"
+            className="hover:bg-primary/10 active:bg-primary/20 active:scale-95 transition-all"
           >
-            <Icon name="ArrowLeft" size={20} />
+            <Icon name="ArrowLeft" size={20} className="text-foreground" />
           </Button>
           <h1 className="font-cormorant text-2xl font-bold flex-1">
             {car.name}
