@@ -297,6 +297,7 @@ export default function Admin() {
       {showCarForm && (
         <CarForm
           car={editingCar || undefined}
+          landlords={landlords}
           onSave={handleSaveCar}
           onCancel={() => {
             setShowCarForm(false);

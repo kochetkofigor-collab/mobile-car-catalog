@@ -11,6 +11,9 @@ def create_car(event: Dict[str, Any]) -> Dict[str, Any]:
     conn = psycopg2.connect(database_url)
     cur = conn.cursor(cursor_factory=RealDictCursor)
     
+    landlord_data = body_data.get('landlord')
+    landlord_id = landlord_data.get('id') if landlord_data else None
+    
     cur.execute('''
         INSERT INTO t_p20454517_mobile_car_catalog.cars 
         (name, brand, year, price_per_day, deposit, buyout_months, images, city, is_new, is_promo, landlord_id)
@@ -27,7 +30,7 @@ def create_car(event: Dict[str, Any]) -> Dict[str, Any]:
         body_data.get('city', ''),
         body_data.get('isNew', False),
         body_data.get('isPromo', False),
-        body_data.get('landlord_id')
+        landlord_id
     ))
     
     result = cur.fetchone()
@@ -49,6 +52,9 @@ def update_car(event: Dict[str, Any]) -> Dict[str, Any]:
     car_id = body_data.get('id')
     database_url = os.environ.get('DATABASE_URL')
     
+    landlord_data = body_data.get('landlord')
+    landlord_id = landlord_data.get('id') if landlord_data else None
+    
     conn = psycopg2.connect(database_url)
     cur = conn.cursor()
     
@@ -69,7 +75,7 @@ def update_car(event: Dict[str, Any]) -> Dict[str, Any]:
         body_data.get('city', ''),
         body_data.get('isNew', False),
         body_data.get('isPromo', False),
-        body_data.get('landlord_id'),
+        landlord_id,
         car_id
     ))
     

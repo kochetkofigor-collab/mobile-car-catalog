@@ -76,6 +76,7 @@ export default function Catalog() {
                   key={car.id}
                   {...car}
                   image={car.images[0]}
+                  isVerified={car.landlord?.isVerified}
                   onClick={() => navigate(`/car/${car.id}`)}
                 />
               ))}
@@ -95,6 +96,7 @@ export default function Catalog() {
                   key={car.id}
                   {...car}
                   image={car.images[0]}
+                  isVerified={car.landlord?.isVerified}
                   onClick={() => navigate(`/car/${car.id}`)}
                 />
               ))}
@@ -113,6 +115,7 @@ export default function Catalog() {
                 key={car.id}
                 {...car}
                 image={car.images[0]}
+                isVerified={car.landlord?.isVerified}
                 onClick={() => navigate(`/car/${car.id}`)}
               />
             ))}

@@ -1,5 +1,6 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import Icon from '@/components/ui/icon';
 
 interface CarCardProps {
   id: number;
@@ -10,10 +11,11 @@ interface CarCardProps {
   city: string;
   isNew?: boolean;
   isPromo?: boolean;
+  isVerified?: boolean;
   onClick: () => void;
 }
 
-export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, onClick }: CarCardProps) => {
+export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, isVerified, onClick }: CarCardProps) => {
   return (
     <Card 
       className="overflow-hidden border-border/40 bg-card hover:border-primary/50 transition-all duration-300 cursor-pointer animate-fade-in hover:scale-[1.02]"
@@ -50,9 +52,16 @@ export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, 
           </h3>
           <p className="text-sm text-muted-foreground">{year} год</p>
         </div>
-        <div className="flex items-baseline gap-1 pt-2 border-t border-border/40">
-          <span className="text-2xl font-bold text-primary">{pricePerDay.toLocaleString('ru-RU')}</span>
-          <span className="text-sm text-muted-foreground">₽/сутки</span>
+        <div className="flex items-center justify-between pt-2 border-t border-border/40">
+          <div className="flex items-baseline gap-1">
+            <span className="text-2xl font-bold text-primary">{pricePerDay.toLocaleString('ru-RU')}</span>
+            <span className="text-sm text-muted-foreground">₽/сутки</span>
+          </div>
+          {isVerified && (
+            <div className="flex items-center gap-1 text-primary">
+              <Icon name="ShieldCheck" size={16} />
+            </div>
+          )}
         </div>
       </div>
     </Card>

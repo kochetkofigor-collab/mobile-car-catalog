@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Car } from '@/data/cars';
+import { Car, Landlord } from '@/data/cars';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -7,6 +7,7 @@ import Icon from '@/components/ui/icon';
 
 interface CarFormProps {
   car?: Car;
+  landlords: Landlord[];
   onSave: (car: Partial<Car>) => void;
   onCancel: () => void;
 }
@@ -16,7 +17,7 @@ interface City {
   name: string;
 }
 
-export default function CarForm({ car, onSave, onCancel }: CarFormProps) {
+export default function CarForm({ car, landlords, onSave, onCancel }: CarFormProps) {
   const [cities, setCities] = useState<City[]>([]);
   const [formData, setFormData] = useState<Partial<Car>>({
     name: car?.name || '',
@@ -29,6 +30,7 @@ export default function CarForm({ car, onSave, onCancel }: CarFormProps) {
     city: car?.city || '',
     isNew: car?.isNew || false,
     isPromo: car?.isPromo || false,
+    landlord: car?.landlord || undefined,
   });
 
   useEffect(() => {
@@ -136,6 +138,33 @@ export default function CarForm({ car, onSave, onCancel }: CarFormProps) {
               <SelectContent>
                 {cities.map(city => (
                   <SelectItem key={city.id} value={city.name}>{city.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Арендодатель</label>
+            <Select 
+              value={formData.landlord?.id?.toString() || 'none'} 
+              onValueChange={(value) => {
+                if (value === 'none') {
+                  handleChange('landlord', undefined);
+                } else {
+                  const selectedLandlord = landlords.find(l => l.id === parseInt(value));
+                  handleChange('landlord', selectedLandlord);
+                }
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите арендодателя" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="none">Без арендодателя</SelectItem>
+                {landlords.map(landlord => (
+                  <SelectItem key={landlord.id} value={landlord.id.toString()}>
+                    {landlord.name} {landlord.isVerified && '✓'}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
