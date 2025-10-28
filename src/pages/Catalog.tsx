@@ -1,17 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CarCard } from '@/components/CarCard';
 import { CarFilters } from '@/components/CarFilters';
-import { cars } from '@/data/cars';
+import { Car } from '@/data/cars';
 import Icon from '@/components/ui/icon';
 
 export default function Catalog() {
   const navigate = useNavigate();
+  const [cars, setCars] = useState<Car[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({
     priceRange: [1000, 10000] as [number, number],
     brand: 'all',
     year: 'all'
   });
+
+  useEffect(() => {
+    fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb')
+      .then(res => res.json())
+      .then(data => {
+        setCars(data);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load cars:', err);
+        setLoading(false);
+      });
+  }, []);
 
   const filteredCars = cars.filter(car => {
     const priceMatch = car.pricePerDay >= filters.priceRange[0] && car.pricePerDay <= filters.priceRange[1];
@@ -23,6 +38,17 @@ export default function Catalog() {
   const newCars = filteredCars.filter(car => car.isNew);
   const promoCars = filteredCars.filter(car => car.isPromo);
   const allCars = filteredCars;
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-background/95 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Icon name="Loader2" size={48} className="mx-auto text-primary animate-spin" />
+          <p className="text-muted-foreground">Загрузка автомобилей...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 pb-8">
@@ -49,6 +75,7 @@ export default function Catalog() {
                 <CarCard
                   key={car.id}
                   {...car}
+                  image={car.images[0]}
                   onClick={() => navigate(`/car/${car.id}`)}
                 />
               ))}
@@ -67,6 +94,7 @@ export default function Catalog() {
                 <CarCard
                   key={car.id}
                   {...car}
+                  image={car.images[0]}
                   onClick={() => navigate(`/car/${car.id}`)}
                 />
               ))}
@@ -84,6 +112,7 @@ export default function Catalog() {
               <CarCard
                 key={car.id}
                 {...car}
+                image={car.images[0]}
                 onClick={() => navigate(`/car/${car.id}`)}
               />
             ))}

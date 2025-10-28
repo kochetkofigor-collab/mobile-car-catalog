@@ -1,6 +1,6 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { cars } from '@/data/cars';
+import { useState, useEffect } from 'react';
+import { Car } from '@/data/cars';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -9,8 +9,34 @@ import Icon from '@/components/ui/icon';
 export default function CarDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const car = cars.find(c => c.id === Number(id));
+  const [car, setCar] = useState<Car | null>(null);
+  const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb')
+      .then(res => res.json())
+      .then(data => {
+        const foundCar = data.find((c: Car) => c.id === Number(id));
+        setCar(foundCar || null);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load car:', err);
+        setLoading(false);
+      });
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Icon name="Loader2" size={48} className="mx-auto text-primary animate-spin" />
+          <p className="text-muted-foreground">Загрузка...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!car) {
     return (
