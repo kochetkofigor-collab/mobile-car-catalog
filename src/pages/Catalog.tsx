@@ -66,10 +66,11 @@ export default function Catalog() {
             </div>
             <Button
               size="icon"
-              className="rounded-full w-12 h-12 flex-shrink-0"
+              variant="outline"
+              className="rounded-full w-10 h-10 flex-shrink-0 border-border/60 hover:border-primary/50 hover:bg-primary/5 transition-all"
               onClick={() => setIsModalOpen(true)}
             >
-              <Icon name="DollarSign" size={24} />
+              <Icon name="DollarSign" size={20} />
             </Button>
           </div>
         </div>
