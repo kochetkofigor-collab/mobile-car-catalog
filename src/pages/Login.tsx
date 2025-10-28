@@ -14,7 +14,7 @@ export default function Login() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (username === 'admin' && password === 'admin123') {
+    if (username === 'admin2077' && password === 'PartymanKot18!') {
       localStorage.setItem('isAdminAuthenticated', 'true');
       navigate('/admin');
     } else {
