@@ -15,7 +15,8 @@ export default function Catalog() {
     priceRange: [1000, 10000] as [number, number],
     brand: 'all',
     year: 'all',
-    city: 'all'
+    city: 'all',
+    comingSoon: false
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -37,11 +38,13 @@ export default function Catalog() {
     const brandMatch = filters.brand === 'all' || car.brand === filters.brand;
     const yearMatch = filters.year === 'all' || car.year.toString() === filters.year;
     const cityMatch = filters.city === 'all' || car.city === filters.city;
-    return priceMatch && brandMatch && yearMatch && cityMatch;
+    const comingSoonMatch = !filters.comingSoon || car.comingSoonDate;
+    return priceMatch && brandMatch && yearMatch && cityMatch && comingSoonMatch;
   });
 
   const newCars = filteredCars.filter(car => car.isNew);
   const promoCars = filteredCars.filter(car => car.isPromo);
+  const comingSoonCars = filteredCars.filter(car => car.comingSoonDate);
   const allCars = filteredCars;
 
   if (loading) {
@@ -109,6 +112,26 @@ export default function Catalog() {
             </div>
             <div className="grid gap-4">
               {promoCars.map(car => (
+                <CarCard
+                  key={car.id}
+                  {...car}
+                  image={car.images[0]}
+                  isVerified={car.landlord?.isVerified}
+                  onClick={() => navigate(`/car/${car.id}`)}
+                />
+              ))}
+            </div>
+          </section>
+        )}
+
+        {comingSoonCars.length > 0 && (
+          <section className="space-y-4 animate-fade-in">
+            <div className="flex items-center gap-2">
+              <Icon name="Clock" size={20} className="text-amber-500" />
+              <h2 className="font-cormorant text-2xl font-semibold">Скоро в наличии</h2>
+            </div>
+            <div className="grid gap-4">
+              {comingSoonCars.map(car => (
                 <CarCard
                   key={car.id}
                   {...car}

@@ -13,10 +13,15 @@ interface CarCardProps {
   isPromo?: boolean;
   isVerified?: boolean;
   isHighlighted?: boolean;
+  comingSoonDate?: string;
   onClick: () => void;
 }
 
-export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, isVerified, isHighlighted, onClick }: CarCardProps) => {
+export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, isVerified, isHighlighted, comingSoonDate, onClick }: CarCardProps) => {
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  };
   return (
     <Card 
       className={`overflow-hidden bg-card transition-all duration-300 cursor-pointer animate-fade-in hover:scale-[1.02] ${
@@ -35,8 +40,13 @@ export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, 
         <div className="absolute top-3 left-3">
           <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-foreground font-medium border border-border/40">{city}</span>
         </div>
-        {(isNew || isPromo) && (
-          <div className="absolute top-3 right-3 flex gap-2">
+        {(isNew || isPromo || comingSoonDate) && (
+          <div className="absolute top-3 right-3 flex flex-col gap-2">
+            {comingSoonDate && (
+              <Badge className="bg-amber-500 text-white font-medium pointer-events-none">
+                Скоро • {formatDate(comingSoonDate)}
+              </Badge>
+            )}
             {isNew && (
               <Badge className="bg-primary text-primary-foreground font-medium pointer-events-none">
                 Новинка

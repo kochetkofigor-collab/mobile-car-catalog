@@ -16,6 +16,11 @@ export default function CarDetail() {
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
 
+  const formatDate = (dateStr: string) => {
+    const date = new Date(dateStr);
+    return date.toLocaleDateString('ru-RU', { day: 'numeric', month: 'long' });
+  };
+
   useEffect(() => {
     fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb')
       .then(res => res.json())
@@ -116,8 +121,13 @@ export default function CarDetail() {
             onClick={() => setIsImageModalOpen(true)}
           />
           
-          <div className="absolute top-3 left-3">
+          <div className="absolute top-3 left-3 flex flex-col gap-2">
             <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-foreground font-medium border border-border/40">{car.city}</span>
+            {car.comingSoonDate && (
+              <Badge className="bg-amber-500 text-white font-medium">
+                Скоро в наличии • {formatDate(car.comingSoonDate)}
+              </Badge>
+            )}
           </div>
           
           {car.images.length > 1 && (

@@ -35,6 +35,7 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
     plateNumber: car?.plateNumber || '',
     sts: car?.sts || '',
     vin: car?.vin || '',
+    comingSoonDate: car?.comingSoonDate || '',
   });
 
   useEffect(() => {
@@ -219,6 +220,17 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
                 placeholder="WBADT43452G123456"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">Скоро в наличии (дата появления)</label>
+            <Input
+              type="date"
+              value={formData.comingSoonDate}
+              onChange={(e) => handleChange('comingSoonDate', e.target.value || null)}
+              placeholder="Выберите дату"
+            />
+            <p className="text-xs text-muted-foreground mt-1">Оставьте пустым, если авто уже доступно</p>
           </div>
 
           <div className="flex gap-4">

@@ -16,8 +16,8 @@ def create_car(event: Dict[str, Any]) -> Dict[str, Any]:
     
     cur.execute('''
         INSERT INTO t_p20454517_mobile_car_catalog.cars 
-        (name, brand, year, price_per_day, deposit, buyout_months, images, city, is_new, is_promo, is_highlighted, landlord_id)
-        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+        (name, brand, year, price_per_day, deposit, buyout_months, images, city, is_new, is_promo, is_highlighted, coming_soon_date, landlord_id)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         RETURNING id
     ''', (
         body_data.get('name'),
@@ -31,6 +31,7 @@ def create_car(event: Dict[str, Any]) -> Dict[str, Any]:
         body_data.get('isNew', False),
         body_data.get('isPromo', False),
         body_data.get('isHighlighted', False),
+        body_data.get('comingSoonDate'),
         landlord_id
     ))
     
@@ -63,7 +64,7 @@ def update_car(event: Dict[str, Any]) -> Dict[str, Any]:
         UPDATE t_p20454517_mobile_car_catalog.cars
         SET name = %s, brand = %s, year = %s, price_per_day = %s,
             deposit = %s, buyout_months = %s, images = %s, city = %s,
-            is_new = %s, is_promo = %s, is_highlighted = %s, landlord_id = %s
+            is_new = %s, is_promo = %s, is_highlighted = %s, coming_soon_date = %s, landlord_id = %s
         WHERE id = %s
     ''', (
         body_data.get('name'),
@@ -77,6 +78,7 @@ def update_car(event: Dict[str, Any]) -> Dict[str, Any]:
         body_data.get('isNew', False),
         body_data.get('isPromo', False),
         body_data.get('isHighlighted', False),
+        body_data.get('comingSoonDate'),
         landlord_id,
         car_id
     ))
@@ -165,7 +167,7 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
     cur.execute('''
         SELECT 
             c.id, c.name, c.brand, c.year, c.price_per_day, c.deposit, 
-            c.buyout_months, c.images, c.city, c.is_new, c.is_promo, c.is_highlighted,
+            c.buyout_months, c.images, c.city, c.is_new, c.is_promo, c.is_highlighted, c.coming_soon_date,
             l.id as landlord_id, l.name as landlord_name, l.phone as landlord_phone,
             l.whatsapp as landlord_whatsapp, l.telegram as landlord_telegram,
             l.is_verified as landlord_verified
@@ -192,7 +194,8 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
             'city': row['city'],
             'isNew': row['is_new'],
             'isPromo': row['is_promo'],
-            'isHighlighted': row['is_highlighted']
+            'isHighlighted': row['is_highlighted'],
+            'comingSoonDate': row['coming_soon_date'].isoformat() if row['coming_soon_date'] else None
         }
         
         if row['landlord_id']:

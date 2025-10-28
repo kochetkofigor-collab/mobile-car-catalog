@@ -10,6 +10,7 @@ interface CarFiltersProps {
     brand: string;
     year: string;
     city: string;
+    comingSoon: boolean;
   }) => void;
 }
 
@@ -23,6 +24,7 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
   const [brand, setBrand] = useState('all');
   const [year, setYear] = useState('all');
   const [city, setCity] = useState('all');
+  const [comingSoon, setComingSoon] = useState(false);
   const [cities, setCities] = useState<City[]>([]);
 
   useEffect(() => {
@@ -35,22 +37,27 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
   const handlePriceChange = (value: number[]) => {
     const range: [number, number] = [value[0], value[1]];
     setPriceRange(range);
-    onFilterChange({ priceRange: range, brand, year, city });
+    onFilterChange({ priceRange: range, brand, year, city, comingSoon });
   };
 
   const handleBrandChange = (value: string) => {
     setBrand(value);
-    onFilterChange({ priceRange, brand: value, year, city });
+    onFilterChange({ priceRange, brand: value, year, city, comingSoon });
   };
 
   const handleYearChange = (value: string) => {
     setYear(value);
-    onFilterChange({ priceRange, brand, year: value, city });
+    onFilterChange({ priceRange, brand, year: value, city, comingSoon });
   };
 
   const handleCityChange = (value: string) => {
     setCity(value);
-    onFilterChange({ priceRange, brand, year, city: value });
+    onFilterChange({ priceRange, brand, year, city: value, comingSoon });
+  };
+
+  const handleComingSoonChange = (checked: boolean) => {
+    setComingSoon(checked);
+    onFilterChange({ priceRange, brand, year, city, comingSoon: checked });
   };
 
   return (
@@ -118,6 +125,21 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
             ))}
           </SelectContent>
         </Select>
+      </div>
+
+      <div className="pt-2">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={comingSoon}
+            onChange={(e) => handleComingSoonChange(e.target.checked)}
+            className="w-4 h-4 rounded border-input"
+          />
+          <span className="text-sm font-medium flex items-center gap-1.5">
+            <Icon name="Clock" size={14} className="text-amber-500" />
+            Скоро в наличии
+          </span>
+        </label>
       </div>
 
       <div className="space-y-2 pt-1">

@@ -25,6 +25,7 @@ export interface Car {
   sts?: string;
   vin?: string;
   isHighlighted?: boolean;
+  comingSoonDate?: string;
 }
 
 export const cars: Car[] = [
