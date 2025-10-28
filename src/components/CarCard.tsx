@@ -24,6 +24,9 @@ export const CarCard = ({ image, name, year, pricePerDay, isNew, isPromo, onClic
           alt={name} 
           className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
         />
+        <div className="absolute top-3 left-3">
+          <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-foreground font-medium border border-border/40">Москва</span>
+        </div>
         {(isNew || isPromo) && (
           <div className="absolute top-3 right-3 flex gap-2">
             {isNew && (
