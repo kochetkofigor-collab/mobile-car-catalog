@@ -67,7 +67,7 @@ export default function Catalog() {
             <Button
               size="icon"
               variant="outline"
-              className="rounded-full w-10 h-10 flex-shrink-0 border-border/60 hover:border-primary/50 hover:bg-primary/5 transition-all"
+              className="rounded-full w-10 h-10 flex-shrink-0 border-border/60 hover:border-primary/50 hover:bg-primary/5 transition-all [&_svg]:text-white"
               onClick={() => setIsModalOpen(true)}
             >
               <Icon name="DollarSign" size={20} />
