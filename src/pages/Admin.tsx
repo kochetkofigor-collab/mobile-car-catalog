@@ -175,7 +175,14 @@ export default function Admin() {
               <h2 className="font-cormorant text-xl md:text-2xl font-semibold mb-4">Управление автомобилями</h2>
               <div className="space-y-3">
                 {cars.map(car => (
-                  <Card key={car.id} className="p-3 md:p-4 hover:border-primary/50 transition-all">
+                  <Card 
+                    key={car.id} 
+                    className={`p-3 md:p-4 transition-all ${
+                      editingCar?.id === car.id 
+                        ? 'border-primary shadow-lg shadow-primary/20 ring-2 ring-primary/30' 
+                        : 'hover:border-primary/50'
+                    }`}
+                  >
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
                       <img 
                         src={car.images[0]} 
