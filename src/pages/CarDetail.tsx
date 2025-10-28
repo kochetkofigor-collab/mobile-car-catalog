@@ -91,10 +91,10 @@ export default function CarDetail() {
 
         <div className="flex gap-2 animate-fade-in">
           {car.isNew && (
-            <Badge className="bg-primary text-primary-foreground">Новинка</Badge>
+            <Badge className="bg-primary text-primary-foreground pointer-events-none select-none">Новинка</Badge>
           )}
           {car.isPromo && (
-            <Badge className="bg-destructive text-destructive-foreground">Акция</Badge>
+            <Badge className="bg-destructive text-destructive-foreground pointer-events-none select-none">Акция</Badge>
           )}
         </div>
 
