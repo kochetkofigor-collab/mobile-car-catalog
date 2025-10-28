@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Car } from '@/data/cars';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 
 interface CarFormProps {
@@ -115,11 +116,18 @@ export default function CarForm({ car, onSave, onCancel }: CarFormProps) {
 
           <div>
             <label className="block text-sm font-medium mb-2">Город</label>
-            <Input
-              value={formData.city}
-              onChange={(e) => handleChange('city', e.target.value)}
-              required
-            />
+            <Select value={formData.city} onValueChange={(value) => handleChange('city', value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Выберите город" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Москва">Москва</SelectItem>
+                <SelectItem value="Санкт-Петербург">Санкт-Петербург</SelectItem>
+                <SelectItem value="Казань">Казань</SelectItem>
+                <SelectItem value="Екатеринбург">Екатеринбург</SelectItem>
+                <SelectItem value="Сочи">Сочи</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
