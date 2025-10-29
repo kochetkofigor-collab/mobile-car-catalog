@@ -13,6 +13,11 @@ service cloud.firestore {
       allow write: if true;
     }
     
+    match /brands/{brandId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
     match /cities/{cityId} {
       allow read: if true;
       allow write: if true;

@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
-import { citiesService } from '@/services/firestore';
+import { citiesService, brandsService, type Brand } from '@/services/firestore';
 
 interface CarFormProps {
   car?: Car;
@@ -13,17 +13,9 @@ interface CarFormProps {
   onCancel: () => void;
 }
 
-
-
-const CAR_BRANDS = [
-  'Hyundai', 'Kia', 'Toyota', 'Honda', 'Mazda', 'Nissan', 'Mitsubishi',
-  'Volkswagen', 'BMW', 'Mercedes-Benz', 'Audi', 'Skoda', 'Renault',
-  'Lada', 'Haval', 'Geely', 'Chery', 'Exeed', 'Tank', 'Evolute',
-  'Ford', 'Chevrolet', 'Peugeot', 'Citroen', 'Volvo', 'Subaru'
-].sort();
-
 export default function CarForm({ car, landlords, onSave, onCancel }: CarFormProps) {
   const [cities, setCities] = useState<string[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
   const [formData, setFormData] = useState<Partial<Car>>({
     name: car?.name || '',
     brand: car?.brand || '',
@@ -44,9 +36,15 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
   });
 
   useEffect(() => {
-    citiesService.getAll()
-      .then(data => setCities(data))
-      .catch(err => console.error('Failed to load cities:', err));
+    Promise.all([
+      citiesService.getAll(),
+      brandsService.getAll()
+    ])
+      .then(([citiesData, brandsData]) => {
+        setCities(citiesData);
+        setBrands(brandsData);
+      })
+      .catch(err => console.error('Failed to load data:', err));
   }, []);
 
   useEffect(() => {
@@ -79,14 +77,14 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium mb-2">Бренд</label>
+              <label className="block text-sm font-medium mb-2">Марка</label>
               <Select value={formData.brand} onValueChange={(value) => handleChange('brand', value)}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Выберите бренд" />
+                  <SelectValue placeholder="Выберите марку" />
                 </SelectTrigger>
                 <SelectContent>
-                  {CAR_BRANDS.map(brand => (
-                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  {brands.map(brand => (
+                    <SelectItem key={brand.id} value={brand.name}>{brand.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -151,7 +149,7 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
               </SelectTrigger>
               <SelectContent>
                 {cities.map(city => (
-                  <SelectItem key={city.id} value={city.name}>{city.name}</SelectItem>
+                  <SelectItem key={city} value={city}>{city}</SelectItem>
                 ))}
               </SelectContent>
             </Select>

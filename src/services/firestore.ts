@@ -15,7 +15,8 @@ export interface FirestoreLandlord extends Omit<Landlord, 'id'> {
 const COLLECTIONS = {
   CARS: 'cars',
   LANDLORDS: 'landlords',
-  CITIES: 'cities'
+  CITIES: 'cities',
+  BRANDS: 'brands'
 };
 
 export const carsService = {
@@ -132,5 +133,44 @@ export const citiesService = {
       createdAt: Timestamp.now()
     });
     return docRef.id;
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.CITIES, id);
+    await deleteDoc(docRef);
+  }
+};
+
+export interface Brand {
+  id?: string;
+  name: string;
+  createdAt?: Date;
+}
+
+export const brandsService = {
+  async getAll(): Promise<Brand[]> {
+    const snapshot = await getDocs(collection(db, COLLECTIONS.BRANDS));
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Brand));
+  },
+
+  async add(name: string): Promise<string> {
+    const docRef = await addDoc(collection(db, COLLECTIONS.BRANDS), {
+      name,
+      createdAt: Timestamp.now()
+    });
+    return docRef.id;
+  },
+
+  async update(id: string, name: string): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.BRANDS, id);
+    await updateDoc(docRef, { name });
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.BRANDS, id);
+    await deleteDoc(docRef);
   }
 };

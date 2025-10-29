@@ -3,6 +3,7 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
+import { citiesService, brandsService, type Brand } from '@/services/firestore';
 
 interface CarFiltersProps {
   onFilterChange: (filters: {
@@ -13,23 +14,24 @@ interface CarFiltersProps {
   }) => void;
 }
 
-interface City {
-  id: number;
-  name: string;
-}
-
 export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
   const [priceRange, setPriceRange] = useState<[number, number]>([1000, 10000]);
   const [brand, setBrand] = useState('all');
   const [year, setYear] = useState('all');
   const [city, setCity] = useState('all');
-  const [cities, setCities] = useState<City[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
 
   useEffect(() => {
-    fetch('https://functions.poehali.dev/98f72ddd-b05e-4e9e-96a6-ddb57c179216')
-      .then(r => r.json())
-      .then(data => setCities(data))
-      .catch(err => console.error('Failed to load cities:', err));
+    Promise.all([
+      citiesService.getAll(),
+      brandsService.getAll()
+    ])
+      .then(([citiesData, brandsData]) => {
+        setCities(citiesData);
+        setBrands(brandsData);
+      })
+      .catch(err => console.error('Failed to load data:', err));
   }, []);
 
   const handlePriceChange = (value: number[]) => {
@@ -72,11 +74,9 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Все</SelectItem>
-              <SelectItem value="mercedes">Mercedes</SelectItem>
-              <SelectItem value="bmw">BMW</SelectItem>
-              <SelectItem value="audi">Audi</SelectItem>
-              <SelectItem value="porsche">Porsche</SelectItem>
-              <SelectItem value="lexus">Lexus</SelectItem>
+              {brands.map(brand => (
+                <SelectItem key={brand.id} value={brand.name}>{brand.name}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -114,7 +114,7 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
           <SelectContent>
             <SelectItem value="all">Все города</SelectItem>
             {cities.map(city => (
-              <SelectItem key={city.id} value={city.name}>{city.name}</SelectItem>
+              <SelectItem key={city} value={city}>{city}</SelectItem>
             ))}
           </SelectContent>
         </Select>
