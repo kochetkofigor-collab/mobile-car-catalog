@@ -55,6 +55,17 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!formData.name || !formData.brand || !formData.city) {
+      alert('Заполните все обязательные поля: Марка, Название, Город');
+      return;
+    }
+    
+    if (!formData.images || formData.images.length === 0 || formData.images[0] === '') {
+      alert('Добавьте хотя бы одно изображение');
+      return;
+    }
+    
     onSave(formData);
   };
 

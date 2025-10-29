@@ -53,6 +53,11 @@ export default function Admin() {
 
   const handleSaveCar = async (carData: Partial<Car>) => {
     try {
+      const carToSave = {
+        ...carData,
+        id: editingCar?.id
+      };
+      
       if (editingCar) {
         await carsService.update(editingCar.id, carData);
       } else {
@@ -63,6 +68,7 @@ export default function Admin() {
       setEditingCar(null);
     } catch (err) {
       console.error('Failed to save car:', err);
+      alert(`Ошибка при сохранении: ${err instanceof Error ? err.message : 'Неизвестная ошибка'}`);
     }
   };
 
@@ -339,7 +345,7 @@ export default function Admin() {
                           <p className="text-sm text-muted-foreground">{request.phone}</p>
                           {request.createdAt && (
                             <p className="text-xs text-muted-foreground">
-                              {new Date(request.createdAt).toLocaleString('ru-RU')}
+                              {request.createdAt.toDate ? request.createdAt.toDate().toLocaleString('ru-RU') : new Date(request.createdAt).toLocaleString('ru-RU')}
                             </p>
                           )}
                         </div>

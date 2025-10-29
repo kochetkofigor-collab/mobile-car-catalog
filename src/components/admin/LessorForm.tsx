@@ -12,16 +12,30 @@ interface LessorFormProps {
 
 export default function LessorForm({ lessor, onSave, onCancel }: LessorFormProps) {
   const [formData, setFormData] = useState<Partial<Landlord>>({
-    name: lessor?.name || '',
-    phone: lessor?.phone || '',
-    whatsapp: lessor?.whatsapp || '',
-    telegram: lessor?.telegram || '',
-    isVerified: lessor?.isVerified || false,
+    name: '',
+    phone: '',
+    whatsapp: '',
+    telegram: '',
+    isVerified: false,
   });
 
   useEffect(() => {
     if (lessor) {
-      setFormData(lessor);
+      setFormData({
+        name: lessor.name || '',
+        phone: lessor.phone || '',
+        whatsapp: lessor.whatsapp || '',
+        telegram: lessor.telegram || '',
+        isVerified: lessor.isVerified || false,
+      });
+    } else {
+      setFormData({
+        name: '',
+        phone: '',
+        whatsapp: '',
+        telegram: '',
+        isVerified: false,
+      });
     }
   }, [lessor]);
 

@@ -5,7 +5,7 @@ export interface ListingRequest {
   id?: string;
   name: string;
   phone: string;
-  createdAt?: Date;
+  createdAt?: any;
 }
 
 const COLLECTION_NAME = 'listing_requests';
@@ -13,10 +13,14 @@ const COLLECTION_NAME = 'listing_requests';
 export const listingRequestsService = {
   async getAll(): Promise<ListingRequest[]> {
     const snapshot = await getDocs(collection(db, COLLECTION_NAME));
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    } as ListingRequest));
+    return snapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        createdAt: data.createdAt
+      } as ListingRequest;
+    });
   },
 
   async add(request: Omit<ListingRequest, 'id' | 'createdAt'>): Promise<string> {
