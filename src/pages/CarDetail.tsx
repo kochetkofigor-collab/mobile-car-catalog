@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
+import { carsService } from '@/services/firestore';
 
 export default function CarDetail() {
   const { id } = useParams();
@@ -22,11 +23,11 @@ export default function CarDetail() {
   };
 
   useEffect(() => {
-    fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb')
-      .then(res => res.json())
-      .then(data => {
-        const foundCar = data.find((c: Car) => c.id === Number(id));
-        setCar(foundCar || null);
+    if (!id) return;
+    
+    carsService.getById(id)
+      .then(foundCar => {
+        setCar(foundCar);
         setLoading(false);
       })
       .catch(err => {

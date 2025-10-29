@@ -6,6 +6,7 @@ import { Car } from '@/data/cars';
 import Icon from '@/components/ui/icon';
 import ListingRequestModal from '@/components/ListingRequestModal';
 import { Button } from '@/components/ui/button';
+import { carsService } from '@/services/firestore';
 
 export default function Catalog() {
   const navigate = useNavigate();
@@ -20,8 +21,7 @@ export default function Catalog() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb')
-      .then(res => res.json())
+    carsService.getAll()
       .then(data => {
         setCars(data);
         setLoading(false);

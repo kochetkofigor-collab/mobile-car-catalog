@@ -2,19 +2,20 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Icon from '@/components/ui/icon';
 import { Car, Landlord } from '@/data/cars';
 import CarForm from '@/components/admin/CarForm';
 import LessorForm from '@/components/admin/LessorForm';
 import CityManagement from '@/components/admin/CityManagement';
+import { carsService, landlordsService } from '@/services/firestore';
+import { listingRequestsService, type ListingRequest } from '@/services/listing-requests';
 
 export default function Admin() {
   const navigate = useNavigate();
   const [cars, setCars] = useState<Car[]>([]);
   const [landlords, setLandlords] = useState<Landlord[]>([]);
-  const [listingRequests, setListingRequests] = useState<any[]>([]);
+  const [listingRequests, setListingRequests] = useState<ListingRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
   const [editingLandlord, setEditingLandlord] = useState<Landlord | null>(null);
@@ -33,9 +34,9 @@ export default function Admin() {
 
   const loadData = () => {
     Promise.all([
-      fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb').then(r => r.json()),
-      fetch('https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73').then(r => r.json()),
-      fetch('https://functions.poehali.dev/9e377815-dae4-48c3-a1c7-aafee87663ed').then(r => r.json())
+      carsService.getAll(),
+      landlordsService.getAll(),
+      listingRequestsService.getAll()
     ])
       .then(([carsData, landlordsData, requestsData]) => {
         setCars(carsData);
@@ -49,68 +50,67 @@ export default function Admin() {
       });
   };
 
-  const handleSaveCar = (carData: Partial<Car>) => {
-    const method = editingCar ? 'PUT' : 'POST';
-    const body = editingCar ? { ...carData, id: editingCar.id } : carData;
-
-    fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb', {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    })
-      .then(() => {
-        loadData();
-        setShowCarForm(false);
-        setEditingCar(null);
-      })
-      .catch(err => console.error('Failed to save car:', err));
+  const handleSaveCar = async (carData: Partial<Car>) => {
+    try {
+      if (editingCar) {
+        await carsService.update(editingCar.id, carData);
+      } else {
+        await carsService.add(carData as any);
+      }
+      loadData();
+      setShowCarForm(false);
+      setEditingCar(null);
+    } catch (err) {
+      console.error('Failed to save car:', err);
+    }
   };
 
-  const handleSaveLandlord = (landlordData: Partial<Landlord>) => {
-    const method = editingLandlord ? 'PUT' : 'POST';
-    const body = editingLandlord ? { ...landlordData, id: editingLandlord.id } : landlordData;
-
-    fetch('https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73', {
-      method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    })
-      .then(() => {
-        loadData();
-        setShowLandlordForm(false);
-        setEditingLandlord(null);
-      })
-      .catch(err => console.error('Failed to save landlord:', err));
+  const handleSaveLandlord = async (landlordData: Partial<Landlord>) => {
+    try {
+      if (editingLandlord) {
+        await landlordsService.update(editingLandlord.id, landlordData);
+      } else {
+        await landlordsService.add(landlordData as any);
+      }
+      loadData();
+      setShowLandlordForm(false);
+      setEditingLandlord(null);
+    } catch (err) {
+      console.error('Failed to save landlord:', err);
+    }
   };
 
-  const handleDeleteCar = (carId: number) => {
+  const handleDeleteCar = async (carId: string) => {
     if (!confirm('Удалить этот автомобиль?')) return;
 
-    fetch(`https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb?id=${carId}`, {
-      method: 'DELETE'
-    })
-      .then(() => loadData())
-      .catch(err => console.error('Failed to delete car:', err));
+    try {
+      await carsService.delete(carId);
+      loadData();
+    } catch (err) {
+      console.error('Failed to delete car:', err);
+    }
   };
 
-  const handleDeleteLandlord = (landlordId: number) => {
+  const handleDeleteLandlord = async (landlordId: string) => {
     if (!confirm('Удалить этого комитента?')) return;
 
-    fetch(`https://functions.poehali.dev/d4435c2a-3bd7-4d37-8c77-18eec246da73?id=${landlordId}`, {
-      method: 'DELETE'
-    })
-      .then(() => loadData())
-      .catch(err => console.error('Failed to delete landlord:', err));
+    try {
+      await landlordsService.delete(landlordId);
+      loadData();
+    } catch (err) {
+      console.error('Failed to delete landlord:', err);
+    }
   };
 
-  const handleDeleteRequest = (requestId: number) => {
+  const handleDeleteRequest = async (requestId: string) => {
     if (!confirm('Удалить эту заявку?')) return;
 
-    fetch(`https://functions.poehali.dev/9e377815-dae4-48c3-a1c7-aafee87663ed?id=${requestId}`, {
-      method: 'DELETE'
-    })
-      .then(() => loadData())
-      .catch(err => console.error('Failed to delete request:', err));
+    try {
+      await listingRequestsService.delete(requestId);
+      loadData();
+    } catch (err) {
+      console.error('Failed to delete request:', err);
+    }
   };
 
   if (loading) {
@@ -202,67 +202,58 @@ export default function Admin() {
                           {car.isPromo && (
                             <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs rounded">Акция</span>
                           )}
+                          {car.isHighlighted && (
+                            <span className="px-2 py-1 bg-yellow-500/10 text-yellow-600 text-xs rounded">VIP</span>
+                          )}
                         </div>
                       </div>
                       <div className="hidden sm:flex gap-2">
                         {car.isNew && (
-                          <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded whitespace-nowrap">Новинка</span>
+                          <span className="px-2 py-1 bg-primary/10 text-primary text-xs rounded">Новинка</span>
                         )}
                         {car.isPromo && (
-                          <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs rounded whitespace-nowrap">Акция</span>
+                          <span className="px-2 py-1 bg-destructive/10 text-destructive text-xs rounded">Акция</span>
+                        )}
+                        {car.isHighlighted && (
+                          <span className="px-2 py-1 bg-yellow-500/10 text-yellow-600 text-xs rounded">VIP</span>
                         )}
                       </div>
-                      <div className="flex gap-2 w-full sm:w-auto flex-wrap">
-                        <Button 
-                          variant="outline" 
+                      <div className="flex gap-2 w-full sm:w-auto">
+                        <Button
                           size="sm"
+                          variant="outline"
                           onClick={() => {
                             setEditingCar(car);
                             setShowCarForm(true);
                           }}
                           className="flex-1 sm:flex-none"
                         >
-                          <Icon name="Pencil" size={16} className="sm:mr-1" />
+                          <Icon name="Edit" size={14} className="mr-1 sm:mr-2" />
                           <span className="hidden sm:inline">Редактировать</span>
+                          <span className="sm:hidden">Ред.</span>
                         </Button>
-                        <Button 
-                          variant={car.isHighlighted ? "default" : "outline"}
+                        <Button
                           size="sm"
-                          onClick={() => {
-                            const updatedCar = { ...car, isHighlighted: !car.isHighlighted };
-                            fetch('https://functions.poehali.dev/e47007a1-86f7-427c-b1d7-4027839fd8eb', {
-                              method: 'PUT',
-                              headers: { 'Content-Type': 'application/json' },
-                              body: JSON.stringify(updatedCar)
-                            })
-                              .then(() => loadData())
-                              .catch(err => console.error('Failed to update highlight:', err));
-                          }}
+                          variant="destructive"
+                          onClick={() => handleDeleteCar(car.id)}
                           className="flex-1 sm:flex-none"
                         >
-                          <Icon name="Zap" size={16} className="sm:mr-1" />
-                          <span className="hidden sm:inline">{car.isHighlighted ? 'Убрать' : 'Выделить'}</span>
-                        </Button>
-                        <Button 
-                          variant="destructive" 
-                          size="sm"
-                          onClick={() => handleDeleteCar(car.id)}
-                        >
-                          <Icon name="Trash2" size={16} />
+                          <Icon name="Trash2" size={14} className="sm:mr-2" />
+                          <span className="hidden sm:inline">Удалить</span>
                         </Button>
                       </div>
                     </div>
                   </Card>
                 ))}
               </div>
-              <Button 
-                className="mt-4 w-full"
+              <Button
                 onClick={() => {
                   setEditingCar(null);
                   setShowCarForm(true);
                 }}
+                className="mt-4 w-full sm:w-auto"
               >
-                <Icon name="Plus" size={18} className="mr-2" />
+                <Icon name="Plus" size={16} className="mr-2" />
                 Добавить автомобиль
               </Button>
             </Card>
@@ -275,61 +266,57 @@ export default function Admin() {
                 {landlords.map(landlord => (
                   <Card key={landlord.id} className="p-3 md:p-4 hover:border-primary/50 transition-all">
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                        <Icon name="User" size={24} className="text-primary" />
-                      </div>
                       <div className="flex-1 min-w-0 w-full">
                         <div className="flex items-center gap-2">
                           <h3 className="font-semibold truncate">{landlord.name}</h3>
                           {landlord.isVerified && (
-                            <Icon name="BadgeCheck" size={16} className="text-primary flex-shrink-0" />
+                            <Icon name="ShieldCheck" size={16} className="text-primary flex-shrink-0" />
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground truncate">
-                          {landlord.phone}
-                        </p>
-                        <div className="flex flex-col sm:flex-row gap-1 sm:gap-2 mt-1">
-                          {landlord.whatsapp && (
-                            <span className="text-xs text-muted-foreground truncate">WhatsApp: {landlord.whatsapp}</span>
-                          )}
-                          {landlord.telegram && (
-                            <span className="text-xs text-muted-foreground truncate">Telegram: @{landlord.telegram}</span>
-                          )}
-                        </div>
+                        <p className="text-sm text-muted-foreground">{landlord.phone}</p>
+                        {landlord.whatsapp && (
+                          <p className="text-xs text-muted-foreground">WhatsApp: {landlord.whatsapp}</p>
+                        )}
+                        {landlord.telegram && (
+                          <p className="text-xs text-muted-foreground">Telegram: {landlord.telegram}</p>
+                        )}
                       </div>
                       <div className="flex gap-2 w-full sm:w-auto">
-                        <Button 
-                          variant="outline" 
+                        <Button
                           size="sm"
+                          variant="outline"
                           onClick={() => {
                             setEditingLandlord(landlord);
                             setShowLandlordForm(true);
                           }}
                           className="flex-1 sm:flex-none"
                         >
-                          <Icon name="Pencil" size={16} className="sm:mr-1" />
+                          <Icon name="Edit" size={14} className="mr-1 sm:mr-2" />
                           <span className="hidden sm:inline">Редактировать</span>
+                          <span className="sm:hidden">Ред.</span>
                         </Button>
-                        <Button 
-                          variant="destructive" 
+                        <Button
                           size="sm"
+                          variant="destructive"
                           onClick={() => handleDeleteLandlord(landlord.id)}
+                          className="flex-1 sm:flex-none"
                         >
-                          <Icon name="Trash2" size={16} />
+                          <Icon name="Trash2" size={14} className="sm:mr-2" />
+                          <span className="hidden sm:inline">Удалить</span>
                         </Button>
                       </div>
                     </div>
                   </Card>
                 ))}
               </div>
-              <Button 
-                className="mt-4 w-full"
+              <Button
                 onClick={() => {
                   setEditingLandlord(null);
                   setShowLandlordForm(true);
                 }}
+                className="mt-4 w-full sm:w-auto"
               >
-                <Icon name="Plus" size={18} className="mr-2" />
+                <Icon name="Plus" size={16} className="mr-2" />
                 Добавить комитента
               </Button>
             </Card>
@@ -338,37 +325,48 @@ export default function Admin() {
           <TabsContent value="requests" className="space-y-4">
             <Card className="p-4 md:p-6">
               <h2 className="font-cormorant text-xl md:text-2xl font-semibold mb-4">Заявки на размещение</h2>
-              <div className="space-y-3">
-                {listingRequests.length === 0 ? (
-                  <p className="text-center text-muted-foreground py-8">Заявок пока нет</p>
-                ) : (
-                  listingRequests.map(request => (
+              {listingRequests.length === 0 ? (
+                <p className="text-muted-foreground text-center py-8">Заявок пока нет</p>
+              ) : (
+                <div className="space-y-3">
+                  {listingRequests.map(request => (
                     <Card key={request.id} className="p-3 md:p-4 hover:border-primary/50 transition-all">
                       <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 md:gap-4">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
-                          <Icon name="User" size={24} className="text-primary" />
-                        </div>
                         <div className="flex-1 min-w-0 w-full">
                           <h3 className="font-semibold truncate">{request.name}</h3>
                           <p className="text-sm text-muted-foreground">{request.phone}</p>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {new Date(request.createdAt).toLocaleString('ru-RU')}
-                          </p>
+                          {request.createdAt && (
+                            <p className="text-xs text-muted-foreground">
+                              {new Date(request.createdAt).toLocaleString('ru-RU')}
+                            </p>
+                          )}
                         </div>
-                        <Button 
-                          variant="destructive" 
-                          size="sm"
-                          onClick={() => handleDeleteRequest(request.id)}
-                          className="w-full sm:w-auto"
-                        >
-                          <Icon name="Trash2" size={16} className="sm:mr-1" />
-                          <span className="hidden sm:inline">Удалить</span>
-                        </Button>
+                        <div className="flex gap-2 w-full sm:w-auto">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => window.open(`tel:${request.phone}`)}
+                            className="flex-1 sm:flex-none"
+                          >
+                            <Icon name="Phone" size={14} className="mr-1 sm:mr-2" />
+                            <span className="hidden sm:inline">Позвонить</span>
+                            <span className="sm:hidden">Поз.</span>
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => request.id && handleDeleteRequest(request.id)}
+                            className="flex-1 sm:flex-none"
+                          >
+                            <Icon name="Trash2" size={14} className="sm:mr-2" />
+                            <span className="hidden sm:inline">Удалить</span>
+                          </Button>
+                        </div>
                       </div>
                     </Card>
-                  ))
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
             </Card>
           </TabsContent>
 
@@ -376,18 +374,6 @@ export default function Admin() {
             <CityManagement />
           </TabsContent>
         </Tabs>
-
-        <Card className="p-4 md:p-6 mt-4 md:mt-6 border-primary/30 bg-primary/5">
-          <div className="flex items-start gap-3">
-            <Icon name="Info" size={20} className="text-primary mt-0.5 flex-shrink-0" />
-            <div>
-              <h3 className="font-semibold mb-1 text-sm md:text-base">Информация</h3>
-              <p className="text-xs md:text-sm text-muted-foreground">
-                Здесь вы можете управлять автомобилями и арендодателями. Все изменения сохраняются в базе данных.
-              </p>
-            </div>
-          </div>
-        </Card>
       </div>
 
       {showCarForm && (
@@ -404,7 +390,7 @@ export default function Admin() {
 
       {showLandlordForm && (
         <LessorForm
-          lessor={editingLandlord || undefined}
+          landlord={editingLandlord || undefined}
           onSave={handleSaveLandlord}
           onCancel={() => {
             setShowLandlordForm(false);

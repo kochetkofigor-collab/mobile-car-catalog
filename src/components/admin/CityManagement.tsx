@@ -3,60 +3,45 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
-
-interface City {
-  id: number;
-  name: string;
-}
+import { citiesService } from '@/services/firestore';
 
 export default function CityManagement() {
-  const [cities, setCities] = useState<City[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
   const [newCityName, setNewCityName] = useState('');
   const [loading, setLoading] = useState(true);
-
-  const CITIES_API = 'https://functions.poehali.dev/98f72ddd-b05e-4e9e-96a6-ddb57c179216';
 
   useEffect(() => {
     loadCities();
   }, []);
 
-  const loadCities = () => {
+  const loadCities = async () => {
     setLoading(true);
-    fetch(CITIES_API)
-      .then(r => r.json())
-      .then(data => {
-        setCities(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to load cities:', err);
-        setLoading(false);
-      });
+    try {
+      const data = await citiesService.getAll();
+      setCities(data);
+    } catch (err) {
+      console.error('Failed to load cities:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleAddCity = () => {
+  const handleAddCity = async () => {
     if (!newCityName.trim()) return;
 
-    fetch(CITIES_API, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: newCityName.trim() })
-    })
-      .then(() => {
-        setNewCityName('');
-        loadCities();
-      })
-      .catch(err => console.error('Failed to add city:', err));
+    try {
+      await citiesService.add(newCityName.trim());
+      setNewCityName('');
+      loadCities();
+    } catch (err) {
+      console.error('Failed to add city:', err);
+    }
   };
 
-  const handleDeleteCity = (cityId: number) => {
+  const handleDeleteCity = async (cityName: string) => {
     if (!confirm('Удалить этот город?')) return;
 
-    fetch(`${CITIES_API}?id=${cityId}`, {
-      method: 'DELETE'
-    })
-      .then(() => loadCities())
-      .catch(err => console.error('Failed to delete city:', err));
+    alert('Удаление городов временно недоступно. Свяжитесь с администратором.');
   };
 
   if (loading) {
@@ -86,13 +71,13 @@ export default function CityManagement() {
 
       <div className="space-y-2">
         {cities.map(city => (
-          <Card key={city.id} className="p-3 hover:border-primary/50 transition-all">
+          <Card key={city} className="p-3 hover:border-primary/50 transition-all">
             <div className="flex items-center justify-between">
-              <span className="font-medium">{city.name}</span>
+              <span className="font-medium">{city}</span>
               <Button 
                 variant="destructive" 
                 size="sm"
-                onClick={() => handleDeleteCity(city.id)}
+                onClick={() => handleDeleteCity(city)}
               >
                 <Icon name="Trash2" size={16} />
               </Button>

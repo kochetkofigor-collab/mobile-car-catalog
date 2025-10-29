@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
+import { citiesService } from '@/services/firestore';
 
 interface CarFormProps {
   car?: Car;
@@ -12,10 +13,7 @@ interface CarFormProps {
   onCancel: () => void;
 }
 
-interface City {
-  id: number;
-  name: string;
-}
+
 
 const CAR_BRANDS = [
   'Hyundai', 'Kia', 'Toyota', 'Honda', 'Mazda', 'Nissan', 'Mitsubishi',
@@ -25,7 +23,7 @@ const CAR_BRANDS = [
 ].sort();
 
 export default function CarForm({ car, landlords, onSave, onCancel }: CarFormProps) {
-  const [cities, setCities] = useState<City[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
   const [formData, setFormData] = useState<Partial<Car>>({
     name: car?.name || '',
     brand: car?.brand || '',
@@ -46,8 +44,7 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
   });
 
   useEffect(() => {
-    fetch('https://functions.poehali.dev/98f72ddd-b05e-4e9e-96a6-ddb57c179216')
-      .then(r => r.json())
+    citiesService.getAll()
       .then(data => setCities(data))
       .catch(err => console.error('Failed to load cities:', err));
   }, []);

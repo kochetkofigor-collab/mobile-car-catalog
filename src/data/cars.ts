@@ -1,5 +1,5 @@
 export interface Landlord {
-  id: number;
+  id: string;
   name: string;
   phone: string;
   whatsapp?: string;
@@ -8,7 +8,7 @@ export interface Landlord {
 }
 
 export interface Car {
-  id: number;
+  id: string;
   name: string;
   brand: string;
   year: number;
@@ -20,6 +20,7 @@ export interface Car {
   isNew?: boolean;
   isPromo?: boolean;
   landlord?: Landlord;
+  landlordId?: string;
   color?: string;
   plateNumber?: string;
   sts?: string;

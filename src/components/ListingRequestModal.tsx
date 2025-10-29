@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
+import { listingRequestsService } from '@/services/listing-requests';
 
 interface ListingRequestModalProps {
   isOpen: boolean;
@@ -23,11 +24,7 @@ export default function ListingRequestModal({ isOpen, onClose }: ListingRequestM
     setIsSubmitting(true);
 
     try {
-      await fetch('https://functions.poehali.dev/9e377815-dae4-48c3-a1c7-aafee87663ed', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
+      await listingRequestsService.add(formData);
       
       setIsSuccess(true);
       setTimeout(() => {

@@ -20,10 +20,9 @@ const COLLECTIONS = {
 
 export const carsService = {
   async getAll(): Promise<Car[]> {
-    const q = query(collection(db, COLLECTIONS.CARS), orderBy('createdAt', 'desc'));
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(collection(db, COLLECTIONS.CARS));
     return snapshot.docs.map(doc => ({
-      id: parseInt(doc.id),
+      id: doc.id,
       ...doc.data()
     } as Car));
   },
@@ -34,7 +33,7 @@ export const carsService = {
     
     if (docSnap.exists()) {
       return {
-        id: parseInt(docSnap.id),
+        id: docSnap.id,
         ...docSnap.data()
       } as Car;
     }
@@ -44,12 +43,11 @@ export const carsService = {
   async getByCity(city: string): Promise<Car[]> {
     const q = query(
       collection(db, COLLECTIONS.CARS),
-      where('city', '==', city),
-      orderBy('createdAt', 'desc')
+      where('city', '==', city)
     );
     const snapshot = await getDocs(q);
     return snapshot.docs.map(doc => ({
-      id: parseInt(doc.id),
+      id: doc.id,
       ...doc.data()
     } as Car));
   },
@@ -79,10 +77,9 @@ export const carsService = {
 
 export const landlordsService = {
   async getAll(): Promise<Landlord[]> {
-    const q = query(collection(db, COLLECTIONS.LANDLORDS), orderBy('createdAt', 'desc'));
-    const snapshot = await getDocs(q);
+    const snapshot = await getDocs(collection(db, COLLECTIONS.LANDLORDS));
     return snapshot.docs.map(doc => ({
-      id: parseInt(doc.id),
+      id: doc.id,
       ...doc.data()
     } as Landlord));
   },
@@ -93,7 +90,7 @@ export const landlordsService = {
     
     if (docSnap.exists()) {
       return {
-        id: parseInt(docSnap.id),
+        id: docSnap.id,
         ...docSnap.data()
       } as Landlord;
     }
