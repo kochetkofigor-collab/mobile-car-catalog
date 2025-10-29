@@ -71,9 +71,8 @@ export default function ListingRequestModal({ isOpen, onClose }: ListingRequestM
               <Button
                 variant="outline"
                 className="w-full"
-                onClick={() => window.open('https://t.me/your_admin_username', '_blank')}
+                onClick={() => window.open('https://t.me/igormajorr', '_blank')}
               >
-                <Icon name="Send" size={18} className="mr-2" />
                 Связаться с администратором в Telegram
               </Button>
             </div>
