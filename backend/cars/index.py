@@ -14,6 +14,9 @@ def create_car(event: Dict[str, Any]) -> Dict[str, Any]:
     landlord_data = body_data.get('landlord')
     landlord_id = landlord_data.get('id') if landlord_data else None
     
+    coming_soon = body_data.get('comingSoonDate')
+    coming_soon_date = coming_soon if coming_soon and coming_soon.strip() else None
+    
     cur.execute('''
         INSERT INTO t_p20454517_mobile_car_catalog.cars 
         (name, brand, year, price_per_day, deposit, buyout_months, images, city, is_new, is_promo, is_highlighted, coming_soon_date, landlord_id)
@@ -31,7 +34,7 @@ def create_car(event: Dict[str, Any]) -> Dict[str, Any]:
         body_data.get('isNew', False),
         body_data.get('isPromo', False),
         body_data.get('isHighlighted', False),
-        body_data.get('comingSoonDate'),
+        coming_soon_date,
         landlord_id
     ))
     
@@ -57,6 +60,9 @@ def update_car(event: Dict[str, Any]) -> Dict[str, Any]:
     landlord_data = body_data.get('landlord')
     landlord_id = landlord_data.get('id') if landlord_data else None
     
+    coming_soon = body_data.get('comingSoonDate')
+    coming_soon_date = coming_soon if coming_soon and coming_soon.strip() else None
+    
     conn = psycopg2.connect(database_url)
     cur = conn.cursor()
     
@@ -78,7 +84,7 @@ def update_car(event: Dict[str, Any]) -> Dict[str, Any]:
         body_data.get('isNew', False),
         body_data.get('isPromo', False),
         body_data.get('isHighlighted', False),
-        body_data.get('comingSoonDate'),
+        coming_soon_date,
         landlord_id,
         car_id
     ))
