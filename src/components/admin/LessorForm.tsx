@@ -20,14 +20,17 @@ export default function LessorForm({ landlord, onSave, onCancel }: LessorFormPro
   });
 
   useEffect(() => {
+    console.log('LessorForm landlord:', landlord);
     if (landlord) {
-      setFormData({
+      const newData = {
         name: landlord.name || '',
         phone: landlord.phone || '',
         whatsapp: landlord.whatsapp || '',
         telegram: landlord.telegram || '',
         isVerified: landlord.isVerified || false,
-      });
+      };
+      console.log('Setting form data:', newData);
+      setFormData(newData);
     } else {
       setFormData({
         name: '',
