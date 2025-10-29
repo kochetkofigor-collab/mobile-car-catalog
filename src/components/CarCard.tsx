@@ -43,7 +43,7 @@ export const CarCard = ({ image, name, year, pricePerDay, city, isNew, isPromo, 
         {(isNew || isPromo || comingSoonDate) && (
           <div className="absolute top-3 right-3 flex flex-col gap-2">
             {comingSoonDate && (
-              <Badge className="bg-amber-500 text-white font-medium pointer-events-none">
+              <Badge className="bg-primary text-primary-foreground font-medium pointer-events-none">
                 Скоро • {formatDate(comingSoonDate)}
               </Badge>
             )}
