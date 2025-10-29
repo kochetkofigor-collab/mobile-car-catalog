@@ -17,6 +17,7 @@ export default function Admin() {
   const [landlords, setLandlords] = useState<Landlord[]>([]);
   const [listingRequests, setListingRequests] = useState<ListingRequest[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [editingCar, setEditingCar] = useState<Car | null>(null);
   const [editingLandlord, setEditingLandlord] = useState<Landlord | null>(null);
   const [showCarForm, setShowCarForm] = useState(false);
@@ -32,22 +33,35 @@ export default function Admin() {
     loadData();
   }, [navigate]);
 
-  const loadData = () => {
-    Promise.all([
-      carsService.getAll(),
-      landlordsService.getAll(),
-      listingRequestsService.getAll()
-    ])
-      .then(([carsData, landlordsData, requestsData]) => {
-        setCars(carsData);
-        setLandlords(landlordsData);
-        setListingRequests(requestsData);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Failed to load data:', err);
-        setLoading(false);
-      });
+  const loadData = async () => {
+    setLoading(true);
+    setError(null);
+    
+    try {
+      const [carsData, landlordsData, requestsData] = await Promise.all([
+        carsService.getAll().catch(err => {
+          console.error('Cars error:', err);
+          return [];
+        }),
+        landlordsService.getAll().catch(err => {
+          console.error('Landlords error:', err);
+          return [];
+        }),
+        listingRequestsService.getAll().catch(err => {
+          console.error('Requests error:', err);
+          return [];
+        })
+      ]);
+      
+      setCars(carsData);
+      setLandlords(landlordsData);
+      setListingRequests(requestsData);
+    } catch (err: any) {
+      console.error('Failed to load data:', err);
+      setError(err.message || 'Ошибка загрузки данных');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSaveCar = async (carData: Partial<Car>) => {
@@ -133,6 +147,12 @@ export default function Admin() {
               <Icon name="Settings" size={20} className="text-primary md:w-6 md:h-6" />
               <h1 className="font-cormorant text-xl md:text-3xl font-bold truncate">Панель управления</h1>
             </div>
+            {error && (
+              <div className="flex-1 flex items-center gap-2 px-3 py-2 bg-destructive/10 text-destructive rounded-md text-sm">
+                <Icon name="AlertCircle" size={16} />
+                <span className="truncate">{error}</span>
+              </div>
+            )}
             <Button
               variant="outline"
               size="sm"
