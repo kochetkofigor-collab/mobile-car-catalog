@@ -1,0 +1,139 @@
+import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, where, orderBy, Timestamp } from 'firebase/firestore';
+import { db } from '@/lib/firebase';
+import type { Car, Landlord } from '@/data/cars';
+
+export interface FirestoreCar extends Omit<Car, 'id'> {
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface FirestoreLandlord extends Omit<Landlord, 'id'> {
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+const COLLECTIONS = {
+  CARS: 'cars',
+  LANDLORDS: 'landlords',
+  CITIES: 'cities'
+};
+
+export const carsService = {
+  async getAll(): Promise<Car[]> {
+    const q = query(collection(db, COLLECTIONS.CARS), orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: parseInt(doc.id),
+      ...doc.data()
+    } as Car));
+  },
+
+  async getById(id: string): Promise<Car | null> {
+    const docRef = doc(db, COLLECTIONS.CARS, id);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return {
+        id: parseInt(docSnap.id),
+        ...docSnap.data()
+      } as Car;
+    }
+    return null;
+  },
+
+  async getByCity(city: string): Promise<Car[]> {
+    const q = query(
+      collection(db, COLLECTIONS.CARS),
+      where('city', '==', city),
+      orderBy('createdAt', 'desc')
+    );
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: parseInt(doc.id),
+      ...doc.data()
+    } as Car));
+  },
+
+  async add(car: FirestoreCar): Promise<string> {
+    const docRef = await addDoc(collection(db, COLLECTIONS.CARS), {
+      ...car,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now()
+    });
+    return docRef.id;
+  },
+
+  async update(id: string, car: Partial<FirestoreCar>): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.CARS, id);
+    await updateDoc(docRef, {
+      ...car,
+      updatedAt: Timestamp.now()
+    });
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.CARS, id);
+    await deleteDoc(docRef);
+  }
+};
+
+export const landlordsService = {
+  async getAll(): Promise<Landlord[]> {
+    const q = query(collection(db, COLLECTIONS.LANDLORDS), orderBy('createdAt', 'desc'));
+    const snapshot = await getDocs(q);
+    return snapshot.docs.map(doc => ({
+      id: parseInt(doc.id),
+      ...doc.data()
+    } as Landlord));
+  },
+
+  async getById(id: string): Promise<Landlord | null> {
+    const docRef = doc(db, COLLECTIONS.LANDLORDS, id);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return {
+        id: parseInt(docSnap.id),
+        ...docSnap.data()
+      } as Landlord;
+    }
+    return null;
+  },
+
+  async add(landlord: FirestoreLandlord): Promise<string> {
+    const docRef = await addDoc(collection(db, COLLECTIONS.LANDLORDS), {
+      ...landlord,
+      createdAt: Timestamp.now(),
+      updatedAt: Timestamp.now()
+    });
+    return docRef.id;
+  },
+
+  async update(id: string, landlord: Partial<FirestoreLandlord>): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.LANDLORDS, id);
+    await updateDoc(docRef, {
+      ...landlord,
+      updatedAt: Timestamp.now()
+    });
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.LANDLORDS, id);
+    await deleteDoc(docRef);
+  }
+};
+
+export const citiesService = {
+  async getAll(): Promise<string[]> {
+    const snapshot = await getDocs(collection(db, COLLECTIONS.CITIES));
+    return snapshot.docs.map(doc => doc.data().name as string);
+  },
+
+  async add(city: string): Promise<string> {
+    const docRef = await addDoc(collection(db, COLLECTIONS.CITIES), {
+      name: city,
+      createdAt: Timestamp.now()
+    });
+    return docRef.id;
+  }
+};
