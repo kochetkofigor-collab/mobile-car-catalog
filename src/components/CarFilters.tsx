@@ -3,7 +3,7 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import { citiesService, brandsService, type Brand } from '@/services/firestore';
+import { citiesService, brandsService, carsService, type Brand } from '@/services/firestore';
 
 interface CarFiltersProps {
   onFilterChange: (filters: {
@@ -21,15 +21,20 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
   const [city, setCity] = useState('all');
   const [cities, setCities] = useState<string[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
+  const [availableYears, setAvailableYears] = useState<number[]>([]);
 
   useEffect(() => {
     Promise.all([
       citiesService.getAll(),
-      brandsService.getAll()
+      brandsService.getAll(),
+      carsService.getAll()
     ])
-      .then(([citiesData, brandsData]) => {
+      .then(([citiesData, brandsData, carsData]) => {
         setCities(citiesData);
         setBrands(brandsData);
+        
+        const years = [...new Set(carsData.map(car => car.year))].sort((a, b) => b - a);
+        setAvailableYears(years);
       })
       .catch(err => console.error('Failed to load data:', err));
   }, []);
@@ -92,11 +97,9 @@ export const CarFilters = ({ onFilterChange }: CarFiltersProps) => {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Все</SelectItem>
-              <SelectItem value="2024">2024</SelectItem>
-              <SelectItem value="2023">2023</SelectItem>
-              <SelectItem value="2022">2022</SelectItem>
-              <SelectItem value="2021">2021</SelectItem>
-              <SelectItem value="2020">2020</SelectItem>
+              {availableYears.map(year => (
+                <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
