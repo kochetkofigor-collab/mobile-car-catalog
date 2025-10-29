@@ -251,7 +251,7 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
             <p className="text-xs text-muted-foreground mt-1">Оставьте пустым, если авто уже доступно</p>
           </div>
 
-          <div className="flex gap-4">
+          <div className="flex gap-4 flex-wrap">
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 type="checkbox"
@@ -269,6 +269,15 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
                 className="w-4 h-4 rounded border-input"
               />
               <span className="text-sm">Акция</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={formData.isHighlighted}
+                onChange={(e) => handleChange('isHighlighted', e.target.checked)}
+                className="w-4 h-4 rounded border-input"
+              />
+              <span className="text-sm">VIP подсветка</span>
             </label>
           </div>
 
