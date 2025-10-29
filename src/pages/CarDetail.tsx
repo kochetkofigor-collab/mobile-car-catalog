@@ -252,6 +252,12 @@ export default function CarDetail() {
                 </Button>
               )}
             </div>
+            <div className="pt-2 border-t border-border/40">
+              <p className="text-xs text-muted-foreground flex items-start gap-1.5">
+                <Icon name="Info" size={14} className="flex-shrink-0 mt-0.5" />
+                <span>Условия и цена могут отличаться. Уточняйте детали у арендодателя перед бронированием.</span>
+              </p>
+            </div>
           </Card>
         )}
       </div>
