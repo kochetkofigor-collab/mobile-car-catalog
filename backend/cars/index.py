@@ -61,7 +61,12 @@ def update_car(event: Dict[str, Any]) -> Dict[str, Any]:
     landlord_id = landlord_data.get('id') if landlord_data else None
     
     coming_soon = body_data.get('comingSoonDate')
-    coming_soon_date = coming_soon if coming_soon and coming_soon.strip() else None
+    coming_soon_date = None
+    if coming_soon:
+        if isinstance(coming_soon, str) and coming_soon.strip():
+            coming_soon_date = coming_soon.strip()
+        elif hasattr(coming_soon, '__str__'):
+            coming_soon_date = str(coming_soon).strip() or None
     
     conn = psycopg2.connect(database_url)
     cur = conn.cursor()
