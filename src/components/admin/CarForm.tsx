@@ -17,6 +17,13 @@ interface City {
   name: string;
 }
 
+const CAR_BRANDS = [
+  'Hyundai', 'Kia', 'Toyota', 'Honda', 'Mazda', 'Nissan', 'Mitsubishi',
+  'Volkswagen', 'BMW', 'Mercedes-Benz', 'Audi', 'Skoda', 'Renault',
+  'Lada', 'Haval', 'Geely', 'Chery', 'Exeed', 'Tank', 'Evolute',
+  'Ford', 'Chevrolet', 'Peugeot', 'Citroen', 'Volvo', 'Subaru'
+].sort();
+
 export default function CarForm({ car, landlords, onSave, onCancel }: CarFormProps) {
   const [cities, setCities] = useState<City[]>([]);
   const [formData, setFormData] = useState<Partial<Car>>({
@@ -76,11 +83,16 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium mb-2">Бренд</label>
-              <Input
-                value={formData.brand}
-                onChange={(e) => handleChange('brand', e.target.value)}
-                required
-              />
+              <Select value={formData.brand} onValueChange={(value) => handleChange('brand', value)}>
+                <SelectTrigger>
+                  <SelectValue placeholder="Выберите бренд" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CAR_BRANDS.map(brand => (
+                    <SelectItem key={brand} value={brand}>{brand}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <label className="block text-sm font-medium mb-2">Название</label>
