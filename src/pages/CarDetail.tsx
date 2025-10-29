@@ -121,13 +121,8 @@ export default function CarDetail() {
             onClick={() => setIsImageModalOpen(true)}
           />
           
-          <div className="absolute top-3 left-3 flex flex-col gap-2">
+          <div className="absolute top-3 left-3">
             <span className="inline-flex items-center gap-1 px-3 py-1.5 rounded-full bg-background/80 backdrop-blur-sm text-foreground font-medium border border-border/40">{car.city}</span>
-            {car.comingSoonDate && (
-              <Badge className="bg-amber-500 text-white font-medium">
-                Скоро в наличии • {formatDate(car.comingSoonDate)}
-              </Badge>
-            )}
           </div>
           
           {car.images.length > 1 && (
@@ -162,6 +157,9 @@ export default function CarDetail() {
         </div>
 
         <div className="flex gap-2 animate-fade-in">
+          {car.comingSoonDate && (
+            <Badge className="bg-primary text-primary-foreground pointer-events-none select-none">Скоро • {formatDate(car.comingSoonDate)}</Badge>
+          )}
           {car.isNew && (
             <Badge className="bg-primary text-primary-foreground pointer-events-none select-none">Новинка</Badge>
           )}
