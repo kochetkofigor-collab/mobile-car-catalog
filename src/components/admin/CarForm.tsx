@@ -169,12 +169,12 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
           <div>
             <label className="block text-sm font-medium mb-2">Комитент</label>
             <Select 
-              value={formData.landlord?.id?.toString() || 'none'} 
+              value={formData.landlord?.id || 'none'} 
               onValueChange={(value) => {
                 if (value === 'none') {
                   handleChange('landlord', undefined);
                 } else {
-                  const selectedLandlord = landlords.find(l => l.id === parseInt(value));
+                  const selectedLandlord = landlords.find(l => l.id === value);
                   handleChange('landlord', selectedLandlord);
                 }
               }}
@@ -185,7 +185,7 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
               <SelectContent>
                 <SelectItem value="none">Без комитента</SelectItem>
                 {landlords.map(landlord => (
-                  <SelectItem key={landlord.id} value={landlord.id.toString()}>
+                  <SelectItem key={landlord.id} value={landlord.id}>
                     {landlord.name} {landlord.isVerified && '✓'}
                   </SelectItem>
                 ))}
