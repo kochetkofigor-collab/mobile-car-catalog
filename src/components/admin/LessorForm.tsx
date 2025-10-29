@@ -5,12 +5,12 @@ import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 
 interface LessorFormProps {
-  lessor?: Landlord;
+  landlord?: Landlord;
   onSave: (lessor: Partial<Landlord>) => void;
   onCancel: () => void;
 }
 
-export default function LessorForm({ lessor, onSave, onCancel }: LessorFormProps) {
+export default function LessorForm({ landlord, onSave, onCancel }: LessorFormProps) {
   const [formData, setFormData] = useState<Partial<Landlord>>({
     name: '',
     phone: '',
@@ -20,13 +20,13 @@ export default function LessorForm({ lessor, onSave, onCancel }: LessorFormProps
   });
 
   useEffect(() => {
-    if (lessor) {
+    if (landlord) {
       setFormData({
-        name: lessor.name || '',
-        phone: lessor.phone || '',
-        whatsapp: lessor.whatsapp || '',
-        telegram: lessor.telegram || '',
-        isVerified: lessor.isVerified || false,
+        name: landlord.name || '',
+        phone: landlord.phone || '',
+        whatsapp: landlord.whatsapp || '',
+        telegram: landlord.telegram || '',
+        isVerified: landlord.isVerified || false,
       });
     } else {
       setFormData({
@@ -37,7 +37,7 @@ export default function LessorForm({ lessor, onSave, onCancel }: LessorFormProps
         isVerified: false,
       });
     }
-  }, [lessor]);
+  }, [landlord]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +53,7 @@ export default function LessorForm({ lessor, onSave, onCancel }: LessorFormProps
       <div className="bg-background rounded-2xl border border-border max-w-lg w-full">
         <div className="bg-background border-b border-border px-6 py-4 flex items-center justify-between rounded-t-2xl">
           <h2 className="text-xl font-semibold">
-            {lessor ? 'Редактировать комитента' : 'Добавить комитента'}
+            {landlord ? 'Редактировать комитента' : 'Добавить комитента'}
           </h2>
           <button onClick={onCancel} className="p-2 hover:bg-muted rounded-full transition-colors">
             <Icon name="X" size={20} />
