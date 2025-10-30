@@ -9,7 +9,7 @@ import CarForm from '@/components/admin/CarForm';
 import LessorForm from '@/components/admin/LessorForm';
 import CityManagement from '@/components/admin/CityManagement';
 import BrandManagement from '@/components/admin/BrandManagement';
-import { carsService, landlordsService } from '@/services/firestore';
+import { carsService, landlordsService } from '@/services/api';
 import { listingRequestsService, type ListingRequest } from '@/services/listing-requests';
 
 export default function Admin() {

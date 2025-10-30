@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
-import { brandsService, type Brand } from '@/services/firestore';
+import { brandsService, type Brand } from '@/services/api';
 
 export default function BrandManagement() {
   const [brands, setBrands] = useState<Brand[]>([]);

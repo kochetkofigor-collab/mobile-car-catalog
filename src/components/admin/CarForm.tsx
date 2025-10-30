@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
-import { citiesService, brandsService, type Brand } from '@/services/firestore';
+import { citiesService, brandsService, type Brand } from '@/services/api';
 
 interface CarFormProps {
   car?: Car;

@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
-import { carsService } from '@/services/firestore';
+import { carsService } from '@/services/api';
 
 export default function CarDetail() {
   const { id } = useParams();
