@@ -3,7 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
-import { citiesService } from '@/services/api';
+import { citiesService } from '@/services/firestore';
 
 export default function CityManagement() {
   const [cities, setCities] = useState<string[]>([]);

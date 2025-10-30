@@ -3,7 +3,7 @@ import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import { citiesService, brandsService, carsService, type Brand } from '@/services/api';
+import { citiesService, brandsService, carsService, type Brand } from '@/services/firestore';
 
 interface CarFiltersProps {
   onFilterChange: (filters: {
