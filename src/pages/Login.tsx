@@ -1,67 +1,81 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
-import Icon from "@/components/ui/icon";
-import TelegramLoginButton from "@/components/TelegramLoginButton";
-import { useAuth } from "@/contexts/AuthContext";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
 
 export default function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  const { user, isLoading } = useAuth();
-  const { toast } = useToast();
 
-  useEffect(() => {
-    if (!isLoading && user) {
-      navigate("/");
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (username === 'admin2077' && password === 'PartymanKot18!') {
+      localStorage.setItem('isAdminAuthenticated', 'true');
+      navigate('/admin');
+    } else {
+      setError('Неверный логин или пароль');
     }
-  }, [user, isLoading, navigate]);
-
-  const handleError = (error: string) => {
-    toast({
-      title: "Ошибка",
-      description: error,
-      variant: "destructive",
-    });
   };
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-b from-background to-background/95 flex items-center justify-center">
-        <Icon name="Loader2" size={48} className="text-primary animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background to-background/95 flex items-center justify-center p-4">
       <Card className="w-full max-w-md p-8">
         <div className="text-center mb-8">
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
-            <Icon name="Send" size={32} className="text-primary" />
+            <Icon name="Lock" size={32} className="text-primary" />
           </div>
-          <h1 className="font-cormorant text-3xl font-bold mb-2">
-            Вход в систему
-          </h1>
-          <p className="text-sm text-muted-foreground">
-            Войдите через Telegram для доступа
-          </p>
+          <h1 className="font-cormorant text-3xl font-bold mb-2">Вход в админ-панель</h1>
+          <p className="text-sm text-muted-foreground">Введите логин и пароль</p>
         </div>
 
-        <TelegramLoginButton botUsername="keyrider_bot" onError={handleError} />
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">Логин</label>
+            <Input
+              value={username}
+              onChange={(e) => {
+                setUsername(e.target.value);
+                setError('');
+              }}
+              placeholder="admin"
+              required
+            />
+          </div>
 
-        <div className="mt-4 p-3 bg-muted rounded-lg text-sm text-muted-foreground">
-          <p className="font-medium mb-1">💡 Как настроить:</p>
-          <ol className="list-decimal list-inside space-y-1 text-xs">
-            <li>Создайте бота через @BotFather в Telegram</li>
-            <li>Замените keyrider_auth_bot на username вашего бота</li>
-            <li>Выполните команду /setdomain в @BotFather</li>
-            <li>Укажите домен вашего сайта</li>
-          </ol>
-        </div>
+          <div>
+            <label className="block text-sm font-medium mb-2">Пароль</label>
+            <Input
+              type="password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setError('');
+              }}
+              placeholder="••••••••"
+              required
+            />
+          </div>
+
+          {error && (
+            <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg flex items-center gap-2">
+              <Icon name="AlertCircle" size={18} className="text-destructive" />
+              <p className="text-sm text-destructive">{error}</p>
+            </div>
+          )}
+
+          <Button type="submit" className="w-full">
+            <Icon name="LogIn" size={18} className="mr-2" />
+            Войти
+          </Button>
+        </form>
 
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate('/')}
           className="mt-6 w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           ← Вернуться на главную
