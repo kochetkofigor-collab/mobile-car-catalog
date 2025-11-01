@@ -224,12 +224,6 @@ export default function CatalogDesktop() {
           </aside>
 
           <main className="col-span-9">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="font-cormorant text-3xl font-semibold">
-                Каталог автомобилей
-              </h2>
-            </div>
-
             {filteredCars.length === 0 ? (
               <Card className="p-12 text-center">
                 <Icon name="Car" size={64} className="mx-auto text-muted-foreground/50 mb-4" />
