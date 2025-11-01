@@ -304,7 +304,7 @@ export default function CatalogDesktop() {
                         </div>
                         <div className="text-right">
                           <p className="text-sm font-semibold">{car.deposit.toLocaleString('ru-RU')} ₽</p>
-                          <p className="text-xs text-muted-foreground">залог</p>
+                          <p className="text-xs text-muted-foreground">Депозит</p>
                         </div>
                       </div>
                     </div>
