@@ -1,5 +1,6 @@
 import Icon from '@/components/ui/icon';
 import { Button } from '@/components/ui/button';
+import Logo from '@/components/Logo';
 
 export default function Footer() {
   return (
@@ -7,9 +8,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
-            <h2 className="font-cormorant text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent mb-4">
-              KEYRIDER
-            </h2>
+            <Logo size="md" className="mb-4" />
             <p className="text-muted-foreground text-sm mb-4">
               Сервис аренды автомобилей с возможностью выкупа
             </p>

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import ListingRequestModal from '@/components/ListingRequestModal';
 import Footer from '@/components/Footer';
+import Logo from '@/components/Logo';
 import { carsService, brandsService, citiesService, type Brand } from '@/services/firestore';
 
 export default function CatalogDesktop() {
@@ -76,9 +77,7 @@ export default function CatalogDesktop() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-12">
               <div>
-                <h1 className="font-cormorant text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-                  KEYRIDER
-                </h1>
+                <Logo size="lg" />
                 <p className="text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
               </div>
               

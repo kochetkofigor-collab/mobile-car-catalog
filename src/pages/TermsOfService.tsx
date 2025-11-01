@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import Footer from '@/components/Footer';
+import Logo from '@/components/Logo';
 
 export default function TermsOfService() {
   const navigate = useNavigate();
@@ -19,9 +20,7 @@ export default function TermsOfService() {
               >
                 <Icon name="ArrowLeft" size={20} />
               </Button>
-              <h1 className="font-cormorant text-3xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-                KEYRIDER
-              </h1>
+              <Logo size="md" />
             </div>
           </div>
         </div>

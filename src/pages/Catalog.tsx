@@ -7,6 +7,7 @@ import Icon from '@/components/ui/icon';
 import ListingRequestModal from '@/components/ListingRequestModal';
 import { Button } from '@/components/ui/button';
 import Footer from '@/components/Footer';
+import Logo from '@/components/Logo';
 import { carsService } from '@/services/firestore';
 
 export default function Catalog() {
@@ -73,8 +74,8 @@ export default function Catalog() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
         <div className="max-w-md mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex-1">
-              <h1 className="font-cormorant text-3xl font-bold text-center bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">KEYRIDER</h1>
+            <div className="flex-1 flex flex-col items-center">
+              <Logo size="md" />
               <p className="text-center text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
             </div>
             <Button
