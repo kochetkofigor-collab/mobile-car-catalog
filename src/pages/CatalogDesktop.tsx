@@ -68,44 +68,47 @@ export default function CatalogDesktop() {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="font-cormorant text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
-                KEYRIDER
-              </h1>
-              <p className="text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
+            <div className="flex items-center gap-12">
+              <div>
+                <h1 className="font-cormorant text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                  KEYRIDER
+                </h1>
+                <p className="text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
+              </div>
+              
+              <nav className="flex items-center gap-8">
+                <a 
+                  href="#" 
+                  className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
+                >
+                  Каталог
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+                </a>
+                <a 
+                  href="#" 
+                  className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
+                >
+                  О нас
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+                </a>
+                <a 
+                  href="#" 
+                  className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
+                >
+                  Контакты
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
+                </a>
+              </nav>
             </div>
             
-            <nav className="flex items-center gap-8">
-              <a 
-                href="#" 
-                className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
-              >
-                Каталог
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
-              </a>
-              <a 
-                href="#" 
-                className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
-              >
-                О нас
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
-              </a>
-              <a 
-                href="#" 
-                className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
-              >
-                Контакты
-                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
-              </a>
-              <Button
-                variant="outline"
-                onClick={() => setIsModalOpen(true)}
-                className="border-border/60 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all ml-2"
-              >
-                <Icon name="DollarSign" size={20} className="mr-2" />
-                Разместить авто
-              </Button>
-            </nav>
+            <Button
+              variant="outline"
+              onClick={() => setIsModalOpen(true)}
+              className="border-border/60 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all"
+            >
+              <Icon name="DollarSign" size={20} className="mr-2" />
+              Разместить авто
+            </Button>
           </div>
         </div>
       </header>
