@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { citiesService, brandsService, type Brand } from '@/services/firestore';
+import { uploadImage } from '@/services/image-upload';
 
 interface CarFormProps {
   car?: Car;
@@ -16,6 +17,7 @@ interface CarFormProps {
 export default function CarForm({ car, landlords, onSave, onCancel }: CarFormProps) {
   const [cities, setCities] = useState<string[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState<Partial<Car>>({
     name: car?.name || '',
     brand: car?.brand || '',
@@ -72,6 +74,31 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
 
   const handleChange = (field: keyof Car, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const uploadPromises = Array.from(files).map(file => uploadImage(file));
+      const urls = await Promise.all(uploadPromises);
+      
+      const currentImages = formData.images || [];
+      handleChange('images', [...currentImages, ...urls]);
+    } catch (err) {
+      console.error('Failed to upload images:', err);
+      alert('Ошибка при загрузке изображений');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    const newImages = [...(formData.images || [])];
+    newImages.splice(index, 1);
+    handleChange('images', newImages);
   };
 
   return (
@@ -195,12 +222,39 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">URL изображений (через запятую)</label>
-            <Input
-              value={Array.isArray(formData.images) ? formData.images.join(', ') : ''}
-              onChange={(e) => handleChange('images', e.target.value.split(',').map(s => s.trim()))}
-              placeholder="https://..., https://..."
-            />
+            <label className="block text-sm font-medium mb-2">Фотографии</label>
+            <div className="space-y-3">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                {formData.images?.map((url, index) => (
+                  <div key={index} className="relative group aspect-video bg-muted rounded-lg overflow-hidden">
+                    <img src={url} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveImage(index)}
+                      className="absolute top-1 right-1 p-1.5 bg-destructive text-destructive-foreground rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <Icon name="X" size={14} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <Input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleImageUpload}
+                  disabled={uploading}
+                  className="cursor-pointer"
+                />
+                {uploading && (
+                  <p className="text-xs text-muted-foreground mt-1 flex items-center gap-2">
+                    <Icon name="Loader2" size={12} className="animate-spin" />
+                    Загрузка...
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
