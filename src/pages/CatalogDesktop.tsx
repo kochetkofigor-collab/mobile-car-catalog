@@ -75,20 +75,32 @@ export default function CatalogDesktop() {
               <p className="text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
             </div>
             
-            <nav className="flex items-center gap-6">
-              <a href="#" className="text-sm font-medium hover:text-primary transition-colors">
+            <nav className="flex items-center gap-8">
+              <a 
+                href="#" 
+                className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
+              >
                 Каталог
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
               </a>
-              <a href="#" className="text-sm font-medium hover:text-primary transition-colors">
+              <a 
+                href="#" 
+                className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
+              >
                 О нас
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
               </a>
-              <a href="#" className="text-sm font-medium hover:text-primary transition-colors">
+              <a 
+                href="#" 
+                className="text-sm font-medium text-foreground/80 hover:text-primary transition-all relative group"
+              >
                 Контакты
+                <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
               </a>
               <Button
                 variant="outline"
                 onClick={() => setIsModalOpen(true)}
-                className="border-border/60 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all"
+                className="border-border/60 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all ml-2"
               >
                 <Icon name="DollarSign" size={20} className="mr-2" />
                 Разместить авто
