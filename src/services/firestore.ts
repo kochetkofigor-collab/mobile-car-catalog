@@ -1,6 +1,7 @@
 import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc, query, where, orderBy, Timestamp } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Car, Landlord } from '@/data/cars';
+import type { Partner } from '@/data/partners';
 
 export interface FirestoreCar extends Omit<Car, 'id'> {
   createdAt?: Date;
@@ -16,7 +17,8 @@ const COLLECTIONS = {
   CARS: 'cars',
   LANDLORDS: 'landlords',
   CITIES: 'cities',
-  BRANDS: 'brands'
+  BRANDS: 'brands',
+  PARTNERS: 'partners'
 };
 
 export const carsService = {
@@ -184,6 +186,55 @@ export const brandsService = {
 
   async delete(id: string): Promise<void> {
     const docRef = doc(db, COLLECTIONS.BRANDS, id);
+    await deleteDoc(docRef);
+  }
+};
+
+export interface FirestorePartner extends Omit<Partner, 'id'> {
+  updatedAt?: Date;
+}
+
+export const partnersService = {
+  async getAll(): Promise<Partner[]> {
+    const snapshot = await getDocs(collection(db, COLLECTIONS.PARTNERS));
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Partner));
+  },
+
+  async getById(id: string): Promise<Partner | null> {
+    const docRef = doc(db, COLLECTIONS.PARTNERS, id);
+    const docSnap = await getDoc(docRef);
+    
+    if (docSnap.exists()) {
+      return {
+        id: docSnap.id,
+        ...docSnap.data()
+      } as Partner;
+    }
+    return null;
+  },
+
+  async add(partner: FirestorePartner): Promise<string> {
+    const docRef = await addDoc(collection(db, COLLECTIONS.PARTNERS), {
+      ...partner,
+      createdAt: new Date().toISOString(),
+      updatedAt: Timestamp.now()
+    });
+    return docRef.id;
+  },
+
+  async update(id: string, partner: Partial<FirestorePartner>): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.PARTNERS, id);
+    await updateDoc(docRef, {
+      ...partner,
+      updatedAt: Timestamp.now()
+    });
+  },
+
+  async delete(id: string): Promise<void> {
+    const docRef = doc(db, COLLECTIONS.PARTNERS, id);
     await deleteDoc(docRef);
   }
 };

@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Slider } from '@/components/ui/slider';
 import ListingRequestModal from '@/components/ListingRequestModal';
 import Footer from '@/components/Footer';
+import Partners from '@/components/Partners';
 import Logo from '@/components/Logo';
 import { carsService, brandsService, citiesService, type Brand } from '@/services/firestore';
 
@@ -323,6 +324,7 @@ export default function CatalogDesktop() {
           </main>
         </div>
       </div>
+      <Partners />
       <Footer />
     </div>
   );

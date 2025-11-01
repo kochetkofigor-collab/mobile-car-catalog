@@ -9,6 +9,7 @@ import CarForm from '@/components/admin/CarForm';
 import LessorForm from '@/components/admin/LessorForm';
 import CityManagement from '@/components/admin/CityManagement';
 import BrandManagement from '@/components/admin/BrandManagement';
+import PartnerManagement from '@/components/admin/PartnerManagement';
 import { carsService, landlordsService } from '@/services/firestore';
 import { listingRequestsService, type ListingRequest } from '@/services/listing-requests';
 
@@ -158,7 +159,7 @@ export default function Admin() {
 
       <div className="max-w-6xl mx-auto px-4 mt-4 md:mt-6">
         <Tabs defaultValue="cars" className="space-y-4 md:space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+          <TabsList className="grid w-full grid-cols-6">
             <TabsTrigger value="cars" className="text-xs md:text-sm">
               <span className="hidden sm:inline">Автомобили</span>
               <span className="sm:hidden">Авто</span>
@@ -176,6 +177,7 @@ export default function Admin() {
             </TabsTrigger>
             <TabsTrigger value="brands" className="text-xs md:text-sm">Марки</TabsTrigger>
             <TabsTrigger value="cities" className="text-xs md:text-sm">Города</TabsTrigger>
+            <TabsTrigger value="partners" className="text-xs md:text-sm">Партнёры</TabsTrigger>
           </TabsList>
 
           <TabsContent value="cars" className="space-y-4">
@@ -384,6 +386,10 @@ export default function Admin() {
 
           <TabsContent value="cities" className="space-y-4">
             <CityManagement />
+          </TabsContent>
+
+          <TabsContent value="partners" className="space-y-4">
+            <PartnerManagement />
           </TabsContent>
         </Tabs>
       </div>
