@@ -240,7 +240,9 @@ export default function CatalogDesktop() {
                 {filteredCars.map(car => (
                   <Card 
                     key={car.id} 
-                    className="overflow-hidden hover:border-primary/50 transition-all cursor-pointer group"
+                    className={`overflow-hidden hover:border-primary/50 transition-all cursor-pointer group ${
+                      car.isHighlighted ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''
+                    }`}
                     onClick={() => navigate(`/car/${car.id}`)}
                   >
                     <div className="relative aspect-video overflow-hidden bg-muted">
@@ -249,6 +251,28 @@ export default function CatalogDesktop() {
                         alt={car.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
+                      <div className="absolute top-2 left-2 flex flex-col gap-2">
+                        {car.isNew && (
+                          <Badge className="bg-primary text-primary-foreground pointer-events-none">
+                            Новинка
+                          </Badge>
+                        )}
+                        {car.isPromo && (
+                          <Badge className="bg-destructive text-destructive-foreground pointer-events-none">
+                            Акция
+                          </Badge>
+                        )}
+                        {car.comingSoonDate && (
+                          <Badge className="bg-primary text-primary-foreground pointer-events-none">
+                            Скоро
+                          </Badge>
+                        )}
+                        {car.rentalOnly && (
+                          <Badge className="bg-secondary text-secondary-foreground pointer-events-none">
+                            Только аренда
+                          </Badge>
+                        )}
+                      </div>
                       {car.landlord?.isVerified && (
                         <div className="absolute top-2 right-2 pointer-events-none">
                           <Badge className="bg-primary text-primary-foreground">
@@ -257,20 +281,13 @@ export default function CatalogDesktop() {
                           </Badge>
                         </div>
                       )}
-                      {car.isNew && (
-                        <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground">
-                          Новинка
-                        </Badge>
-                      )}
-                      {car.isPromo && (
-                        <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground">
-                          Акция
-                        </Badge>
-                      )}
-                      {car.comingSoonDate && (
-                        <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground">
-                          Скоро
-                        </Badge>
+                      {car.isHighlighted && (
+                        <div className="absolute bottom-2 left-2 pointer-events-none">
+                          <Badge className="bg-yellow-500 text-yellow-950">
+                            <Icon name="Star" size={12} className="mr-1" />
+                            VIP
+                          </Badge>
+                        </div>
                       )}
                     </div>
                     <div className="p-4">
