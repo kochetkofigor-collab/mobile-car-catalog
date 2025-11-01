@@ -49,10 +49,10 @@ export default function Login() {
         </div>
 
         <TelegramLoginButton
-          botUsername="keyrider_auth_bot"
+          botUsername="k@keyrider_bot"
           onError={handleError}
         />
-        
+
         <div className="mt-4 p-3 bg-muted rounded-lg text-sm text-muted-foreground">
           <p className="font-medium mb-1">💡 Как настроить:</p>
           <ol className="list-decimal list-inside space-y-1 text-xs">
