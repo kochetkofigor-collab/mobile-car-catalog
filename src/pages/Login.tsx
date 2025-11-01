@@ -1,10 +1,10 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Card } from '@/components/ui/card';
-import Icon from '@/components/ui/icon';
-import TelegramLoginButton from '@/components/TelegramLoginButton';
-import { useAuth } from '@/contexts/AuthContext';
-import { useToast } from '@/hooks/use-toast';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { Card } from "@/components/ui/card";
+import Icon from "@/components/ui/icon";
+import TelegramLoginButton from "@/components/TelegramLoginButton";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -13,15 +13,15 @@ export default function Login() {
 
   useEffect(() => {
     if (!isLoading && user) {
-      navigate('/');
+      navigate("/");
     }
   }, [user, isLoading, navigate]);
 
   const handleError = (error: string) => {
     toast({
-      title: 'Ошибка',
+      title: "Ошибка",
       description: error,
-      variant: 'destructive'
+      variant: "destructive",
     });
   };
 
@@ -40,19 +40,23 @@ export default function Login() {
           <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center">
             <Icon name="Send" size={32} className="text-primary" />
           </div>
-          <h1 className="font-cormorant text-3xl font-bold mb-2">Вход в систему</h1>
-          <p className="text-sm text-muted-foreground">Войдите через Telegram для доступа</p>
+          <h1 className="font-cormorant text-3xl font-bold mb-2">
+            Вход в систему
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Войдите через Telegram для доступа
+          </p>
         </div>
 
         <div className="flex justify-center">
-          <TelegramLoginButton 
-            botId="YOUR_BOT_ID" 
+          <TelegramLoginButton
+            botId="Y7985105519:AAGsRPbcs8yPFaQ_jUQKcP_JuUs9x3-QYIM"
             onError={handleError}
           />
         </div>
 
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate("/")}
           className="mt-6 w-full text-center text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           ← Вернуться на главную
