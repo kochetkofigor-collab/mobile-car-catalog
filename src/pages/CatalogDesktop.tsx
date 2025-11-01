@@ -255,7 +255,7 @@ export default function CatalogDesktop() {
                         <div className="absolute top-2 right-2 pointer-events-none">
                           <Badge className="bg-primary text-primary-foreground">
                             <Icon name="ShieldCheck" size={12} className="mr-1" />
-                            Проверен
+                            Проверенный арендодатель
                           </Badge>
                         </div>
                       )}
