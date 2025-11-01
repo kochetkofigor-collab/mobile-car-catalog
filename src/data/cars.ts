@@ -27,4 +27,5 @@ export interface Car {
   vin?: string;
   isHighlighted?: boolean;
   comingSoonDate?: string;
+  rentalOnly?: boolean;
 }

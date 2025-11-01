@@ -33,6 +33,7 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
     sts: car?.sts || '',
     vin: car?.vin || '',
     comingSoonDate: car?.comingSoonDate || '',
+    rentalOnly: car?.rentalOnly || false,
   });
 
   useEffect(() => {
@@ -278,6 +279,15 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
                 className="w-4 h-4 rounded border-input"
               />
               <span className="text-sm">VIP подсветка</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={formData.rentalOnly}
+                onChange={(e) => handleChange('rentalOnly', e.target.checked)}
+                className="w-4 h-4 rounded border-input"
+              />
+              <span className="text-sm">Только аренда (без выкупа)</span>
             </label>
           </div>
 

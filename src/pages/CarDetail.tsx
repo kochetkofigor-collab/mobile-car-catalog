@@ -191,10 +191,19 @@ export default function CarDetail() {
               </div>
             </div>
             <div className="text-center space-y-2">
-              <Icon name="Calendar" size={24} className="mx-auto text-primary" />
+              <Icon name={car.rentalOnly ? "X" : "Calendar"} size={24} className="mx-auto text-primary" />
               <div>
-                <p className="text-2xl font-bold text-foreground">{car.buyoutMonths}</p>
-                <p className="text-xs text-muted-foreground">мес. выкупа</p>
+                {car.rentalOnly ? (
+                  <>
+                    <p className="text-lg font-bold text-foreground">Не под выкуп</p>
+                    <p className="text-xs text-muted-foreground">Только аренда</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-2xl font-bold text-foreground">{car.buyoutMonths}</p>
+                    <p className="text-xs text-muted-foreground">мес. выкупа</p>
+                  </>
+                )}
               </div>
             </div>
           </div>
