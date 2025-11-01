@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer className="bg-card border-t border-border mt-20">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
           <div>
             <Logo size="md" className="mb-4" />
             <p className="text-muted-foreground text-sm mb-4">
@@ -37,43 +37,17 @@ export default function Footer() {
             <ul className="space-y-3 text-sm">
               <li>
                 <a href="/" className="text-muted-foreground hover:text-primary transition-colors">
-                  Каталог автомобилей
+                  Каталог
                 </a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  О сервисе
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Как это работает
+                  О нас
                 </a>
               </li>
               <li>
                 <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
                   Контакты
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 className="font-semibold mb-4">Для арендодателей</h3>
-            <ul className="space-y-3 text-sm">
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Разместить автомобиль
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Условия размещения
-                </a>
-              </li>
-              <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                  Поддержка
                 </a>
               </li>
             </ul>
@@ -109,14 +83,7 @@ export default function Footer() {
         <div className="pt-8 border-t border-border">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>© 2024 KEYRIDER. Все права защищены.</p>
-            <div className="flex gap-4">
-              <a href="#" className="hover:text-primary transition-colors">
-                <Icon name="Mail" size={20} />
-              </a>
-              <a href="#" className="hover:text-primary transition-colors">
-                <Icon name="Phone" size={20} />
-              </a>
-            </div>
+
           </div>
         </div>
       </div>
