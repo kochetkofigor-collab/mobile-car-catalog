@@ -18,6 +18,7 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
   const [cities, setCities] = useState<string[]>([]);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [formData, setFormData] = useState<Partial<Car>>({
     name: car?.name || '',
     brand: car?.brand || '',
@@ -99,6 +100,28 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
     const newImages = [...(formData.images || [])];
     newImages.splice(index, 1);
     handleChange('images', newImages);
+  };
+
+  const handleMoveImage = (fromIndex: number, toIndex: number) => {
+    if (fromIndex === toIndex) return;
+    
+    const newImages = [...(formData.images || [])];
+    const [movedImage] = newImages.splice(fromIndex, 1);
+    newImages.splice(toIndex, 0, movedImage);
+    
+    handleChange('images', newImages);
+  };
+
+  const handleMoveLeft = (index: number) => {
+    if (index > 0) {
+      handleMoveImage(index, index - 1);
+    }
+  };
+
+  const handleMoveRight = (index: number) => {
+    if (formData.images && index < formData.images.length - 1) {
+      handleMoveImage(index, index + 1);
+    }
   };
 
   return (
@@ -226,8 +249,29 @@ export default function CarForm({ car, landlords, onSave, onCancel }: CarFormPro
             <div className="space-y-3">
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                 {formData.images?.map((url, index) => (
-                  <div key={index} className="relative group aspect-video bg-muted rounded-lg overflow-hidden">
+                  <div key={index} className="relative group aspect-video bg-muted rounded-lg overflow-hidden border-2 border-border">
                     <img src={url} alt={`Preview ${index + 1}`} className="w-full h-full object-cover" />
+                    <div className="absolute top-1 left-1 px-2 py-0.5 bg-background/90 backdrop-blur-sm rounded text-xs font-semibold">
+                      {index + 1}
+                    </div>
+                    <div className="absolute bottom-1 left-1/2 -translate-x-1/2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button
+                        type="button"
+                        onClick={() => handleMoveLeft(index)}
+                        disabled={index === 0}
+                        className="p-1.5 bg-background/90 backdrop-blur-sm rounded-full disabled:opacity-30 hover:bg-background"
+                      >
+                        <Icon name="ChevronLeft" size={14} />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleMoveRight(index)}
+                        disabled={!formData.images || index === formData.images.length - 1}
+                        className="p-1.5 bg-background/90 backdrop-blur-sm rounded-full disabled:opacity-30 hover:bg-background"
+                      >
+                        <Icon name="ChevronRight" size={14} />
+                      </button>
+                    </div>
                     <button
                       type="button"
                       onClick={() => handleRemoveImage(index)}
