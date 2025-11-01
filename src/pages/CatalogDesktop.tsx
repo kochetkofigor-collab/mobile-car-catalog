@@ -124,10 +124,15 @@ export default function CatalogDesktop() {
         <div className="grid grid-cols-12 gap-6">
           <aside className="col-span-3 space-y-6">
             <Card className="p-6 sticky top-24">
-              <h2 className="font-cormorant text-2xl font-semibold mb-4 flex items-center gap-2">
-                <Icon name="SlidersHorizontal" size={20} className="text-primary" />
-                Фильтры
-              </h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-cormorant text-2xl font-semibold flex items-center gap-2">
+                  <Icon name="SlidersHorizontal" size={20} className="text-primary" />
+                  Фильтры
+                </h2>
+                <span className="text-sm text-muted-foreground">
+                  Найдено: <span className="font-semibold text-primary">{filteredCars.length}</span>
+                </span>
+              </div>
               
               <div className="space-y-4">
                 <div>
