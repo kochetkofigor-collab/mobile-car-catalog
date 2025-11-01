@@ -240,7 +240,7 @@ export default function CatalogDesktop() {
                 {filteredCars.map(car => (
                   <Card 
                     key={car.id} 
-                    className={`overflow-hidden hover:border-primary/50 transition-all cursor-pointer group ${
+                    className={`overflow-hidden hover:border-primary/50 transition-all cursor-pointer group flex flex-col h-full ${
                       car.isHighlighted ? 'ring-2 ring-primary shadow-lg shadow-primary/20' : ''
                     }`}
                     onClick={() => navigate(`/car/${car.id}`)}
@@ -268,7 +268,7 @@ export default function CatalogDesktop() {
                         </div>
                       )}
                     </div>
-                    <div className="p-4">
+                    <div className="p-4 flex-1 flex flex-col">
                       {(car.isNew || car.isPromo || car.comingSoonDate || car.rentalOnly) && (
                         <div className="flex flex-wrap gap-1.5 mb-3">
                           {car.isNew && (
@@ -296,10 +296,10 @@ export default function CatalogDesktop() {
                       <h3 className={`font-cormorant text-xl font-semibold mb-1 group-hover:text-primary transition-colors ${!(car.isNew || car.isPromo || car.comingSoonDate || car.rentalOnly) ? 'mt-1' : ''}`}>
                         {car.name}
                       </h3>
-                      <p className={`text-sm text-muted-foreground ${!(car.isNew || car.isPromo || car.comingSoonDate || car.rentalOnly) ? 'mb-3' : 'mb-2'}`}>
+                      <p className={`text-sm text-muted-foreground ${!(car.isNew || car.isPromo || car.comingSoonDate || car.rentalOnly) ? 'mb-auto' : 'mb-2'}`}>
                         {car.year} год • {car.city}
                       </p>
-                      <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center justify-between mb-2 mt-auto">
                         <div>
                           <p className="text-2xl font-bold text-primary">{car.pricePerDay.toLocaleString('ru-RU')} ₽</p>
                           <p className="text-xs text-muted-foreground">за сутки</p>
