@@ -17,8 +17,9 @@ export default function PrivacyPolicy() {
                 variant="ghost"
                 size="icon"
                 onClick={() => navigate('/')}
+                className="hover:bg-primary/10 active:bg-primary/20 active:scale-95 transition-all"
               >
-                <Icon name="ArrowLeft" size={20} />
+                <Icon name="ArrowLeft" size={20} className="text-foreground" />
               </Button>
               <Logo size="md" />
             </div>
