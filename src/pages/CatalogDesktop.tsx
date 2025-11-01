@@ -20,7 +20,8 @@ export default function CatalogDesktop() {
     brand: 'all',
     city: 'all',
     priceRange: [1000, 10000] as [number, number],
-    year: 'all'
+    year: 'all',
+    category: 'all'
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -47,7 +48,11 @@ export default function CatalogDesktop() {
     const cityMatch = filters.city === 'all' || car.city === filters.city;
     const yearMatch = filters.year === 'all' || car.year.toString() === filters.year;
     const priceMatch = car.pricePerDay >= filters.priceRange[0] && car.pricePerDay <= filters.priceRange[1];
-    return brandMatch && cityMatch && yearMatch && priceMatch;
+    const categoryMatch = filters.category === 'all' || 
+      (filters.category === 'promo' && car.isPromo) ||
+      (filters.category === 'new' && car.isNew) ||
+      (filters.category === 'comingSoon' && car.comingSoonDate);
+    return brandMatch && cityMatch && yearMatch && priceMatch && categoryMatch;
   });
 
   const years = Array.from(new Set(cars.map(car => car.year))).sort((a, b) => b - a);
@@ -126,6 +131,21 @@ export default function CatalogDesktop() {
               
               <div className="space-y-4">
                 <div>
+                  <label className="block text-sm font-medium mb-2">Категория</label>
+                  <Select value={filters.category} onValueChange={(value) => setFilters(prev => ({ ...prev, category: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Все" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Все</SelectItem>
+                      <SelectItem value="promo">Акции</SelectItem>
+                      <SelectItem value="new">Новинки</SelectItem>
+                      <SelectItem value="comingSoon">Скоро появится</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
                   <label className="block text-sm font-medium mb-2">Город</label>
                   <Select value={filters.city} onValueChange={(value) => setFilters(prev => ({ ...prev, city: value }))}>
                     <SelectTrigger>
@@ -189,11 +209,11 @@ export default function CatalogDesktop() {
                   </div>
                 </div>
 
-                {(filters.brand !== 'all' || filters.city !== 'all' || filters.year !== 'all' || filters.priceRange[0] !== 1000 || filters.priceRange[1] !== 10000) && (
+                {(filters.brand !== 'all' || filters.city !== 'all' || filters.year !== 'all' || filters.category !== 'all' || filters.priceRange[0] !== 1000 || filters.priceRange[1] !== 10000) && (
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => setFilters({ brand: 'all', city: 'all', year: 'all', priceRange: [1000, 10000] })}
+                    onClick={() => setFilters({ brand: 'all', city: 'all', year: 'all', category: 'all', priceRange: [1000, 10000] })}
                   >
                     <Icon name="X" size={16} className="mr-2" />
                     Сбросить фильтры
