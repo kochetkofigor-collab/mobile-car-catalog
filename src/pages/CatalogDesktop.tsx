@@ -75,14 +75,26 @@ export default function CatalogDesktop() {
               </h1>
               <p className="text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
             </div>
-            <Button
-              variant="outline"
-              onClick={() => setIsModalOpen(true)}
-              className="border-border/60 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all"
-            >
-              <Icon name="DollarSign" size={20} className="mr-2" />
-              Разместить авто
-            </Button>
+            
+            <nav className="flex items-center gap-6">
+              <a href="#" className="text-sm font-medium hover:text-primary transition-colors">
+                Каталог
+              </a>
+              <a href="#" className="text-sm font-medium hover:text-primary transition-colors">
+                О нас
+              </a>
+              <a href="#" className="text-sm font-medium hover:text-primary transition-colors">
+                Контакты
+              </a>
+              <Button
+                variant="outline"
+                onClick={() => setIsModalOpen(true)}
+                className="border-border/60 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all"
+              >
+                <Icon name="DollarSign" size={20} className="mr-2" />
+                Разместить авто
+              </Button>
+            </nav>
           </div>
         </div>
       </header>
