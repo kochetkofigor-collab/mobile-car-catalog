@@ -1,16 +1,15 @@
 export async function uploadImage(file: File): Promise<string> {
-  const formData = new FormData();
-  formData.append('file', file);
-
-  const response = await fetch('/api/upload', {
-    method: 'POST',
-    body: formData,
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    
+    reader.onerror = () => {
+      reject(new Error('Ошибка чтения файла'));
+    };
+    
+    reader.readAsDataURL(file);
   });
-
-  if (!response.ok) {
-    throw new Error('Failed to upload image');
-  }
-
-  const data = await response.json();
-  return data.url;
 }
