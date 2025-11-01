@@ -14,7 +14,7 @@ export default function Logo({ className, size = 'md' }: LogoProps) {
 
   return (
     <h1 className={cn(
-      'font-cormorant font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent',
+      'font-cormorant font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent uppercase',
       titleSizes[size],
       className
     )}>
