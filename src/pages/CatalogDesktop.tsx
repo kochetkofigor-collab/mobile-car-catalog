@@ -7,7 +7,6 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import ListingRequestModal from '@/components/ListingRequestModal';
 import { carsService, brandsService, citiesService, type Brand } from '@/services/firestore';
 
@@ -315,81 +314,6 @@ export default function CatalogDesktop() {
             )}
           </main>
         </div>
-
-        <section className="max-w-4xl mx-auto mt-16 mb-12">
-          <div className="text-center mb-10">
-            <h2 className="font-cormorant text-4xl font-bold mb-3">
-              Часто задаваемые вопросы
-            </h2>
-            <p className="text-muted-foreground">
-              Ответы на популярные вопросы об аренде автомобилей
-            </p>
-          </div>
-
-          <Card className="p-6">
-            <Accordion type="single" collapsible className="w-full">
-              <AccordionItem value="item-1">
-                <AccordionTrigger className="text-left hover:text-primary transition-colors">
-                  Как арендовать автомобиль?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  Выберите автомобиль из каталога, свяжитесь с владельцем по указанным контактам. 
-                  Обсудите условия аренды, внесите залог и заключите договор. После этого можете забрать автомобиль.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-2">
-                <AccordionTrigger className="text-left hover:text-primary transition-colors">
-                  Что такое выкуп автомобиля?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  Выкуп — это возможность приобрести автомобиль после аренды. Часть арендных платежей 
-                  засчитывается в стоимость автомобиля. Количество месяцев для выкупа указано в карточке авто.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-3">
-                <AccordionTrigger className="text-left hover:text-primary transition-colors">
-                  Какие документы нужны для аренды?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  Обычно требуется паспорт и водительское удостоверение. Некоторые владельцы могут запросить 
-                  дополнительные документы. Уточняйте детали при связи с владельцем.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-4">
-                <AccordionTrigger className="text-left hover:text-primary transition-colors">
-                  Что означает бейдж "Проверен"?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  Это означает, что владелец автомобиля прошел проверку и подтвердил свою личность. 
-                  Такие объявления считаются более надежными.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-5">
-                <AccordionTrigger className="text-left hover:text-primary transition-colors">
-                  Можно ли вернуть залог?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  Да, залог возвращается после окончания аренды при условии, что автомобиль возвращен 
-                  в исходном состоянии без повреждений и в оговоренный срок.
-                </AccordionContent>
-              </AccordionItem>
-
-              <AccordionItem value="item-6">
-                <AccordionTrigger className="text-left hover:text-primary transition-colors">
-                  Как разместить свой автомобиль?
-                </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">
-                  Нажмите кнопку "Разместить авто" в шапке сайта и заполните форму с информацией 
-                  о вашем автомобиле. Мы свяжемся с вами для подтверждения размещения.
-                </AccordionContent>
-              </AccordionItem>
-            </Accordion>
-          </Card>
-        </section>
       </div>
     </div>
   );
