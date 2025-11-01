@@ -251,28 +251,6 @@ export default function CatalogDesktop() {
                         alt={car.name}
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
-                      <div className="absolute top-2 left-2 flex flex-col gap-2">
-                        {car.isNew && (
-                          <Badge className="bg-primary text-primary-foreground pointer-events-none">
-                            Новинка
-                          </Badge>
-                        )}
-                        {car.isPromo && (
-                          <Badge className="bg-destructive text-destructive-foreground pointer-events-none">
-                            Акция
-                          </Badge>
-                        )}
-                        {car.comingSoonDate && (
-                          <Badge className="bg-primary text-primary-foreground pointer-events-none">
-                            Скоро
-                          </Badge>
-                        )}
-                        {car.rentalOnly && (
-                          <Badge className="bg-secondary text-secondary-foreground pointer-events-none">
-                            Только аренда
-                          </Badge>
-                        )}
-                      </div>
                       {car.landlord?.isVerified && (
                         <div className="absolute top-2 right-2 pointer-events-none">
                           <Badge className="bg-primary text-primary-foreground">
@@ -291,6 +269,28 @@ export default function CatalogDesktop() {
                       )}
                     </div>
                     <div className="p-4">
+                      <div className="flex flex-wrap gap-1.5 mb-3">
+                        {car.isNew && (
+                          <Badge className="bg-primary text-primary-foreground pointer-events-none text-xs">
+                            Новинка
+                          </Badge>
+                        )}
+                        {car.isPromo && (
+                          <Badge className="bg-destructive text-destructive-foreground pointer-events-none text-xs">
+                            Акция
+                          </Badge>
+                        )}
+                        {car.comingSoonDate && (
+                          <Badge className="bg-primary text-primary-foreground pointer-events-none text-xs">
+                            Скоро
+                          </Badge>
+                        )}
+                        {car.rentalOnly && (
+                          <Badge className="bg-secondary text-secondary-foreground pointer-events-none text-xs">
+                            Только аренда
+                          </Badge>
+                        )}
+                      </div>
                       <h3 className="font-cormorant text-xl font-semibold mb-1 group-hover:text-primary transition-colors">
                         {car.name}
                       </h3>
