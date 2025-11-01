@@ -6,7 +6,7 @@ import { Car } from '@/data/cars';
 import Icon from '@/components/ui/icon';
 import ListingRequestModal from '@/components/ListingRequestModal';
 import { Button } from '@/components/ui/button';
-import Footer from '@/components/Footer';
+
 import Logo from '@/components/Logo';
 import { carsService } from '@/services/firestore';
 
@@ -181,7 +181,6 @@ export default function Catalog() {
           </div>
         )}
       </div>
-      <Footer />
     </div>
   );
 }
