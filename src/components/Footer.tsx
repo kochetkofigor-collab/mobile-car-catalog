@@ -12,8 +12,20 @@ export default function Footer() {
             <p className="text-muted-foreground text-sm mb-4">
               Сервис аренды автомобилей с возможностью выкупа
             </p>
-            <div className="flex gap-3">
-              <Button variant="outline" size="sm" className="gap-2">
+            <div className="flex flex-col gap-3">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2 border-border/60 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all"
+              >
+                <Icon name="MessageCircle" size={16} />
+                Написать директору
+              </Button>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                className="gap-2 border-border/60 hover:border-primary/50 hover:bg-primary/5 hover:text-foreground transition-all"
+              >
                 <Icon name="Download" size={16} />
                 RuStore
               </Button>
