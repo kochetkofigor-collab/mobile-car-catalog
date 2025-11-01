@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 import { partnersService } from '@/services/firestore';
+import { uploadImage } from '@/lib/upload';
 import type { Partner } from '@/data/partners';
 
 export default function PartnerManagement() {
@@ -12,6 +13,7 @@ export default function PartnerManagement() {
   const [loading, setLoading] = useState(true);
   const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
   const [showForm, setShowForm] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     logo: '',
@@ -57,8 +59,29 @@ export default function PartnerManagement() {
     }
   };
 
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      setUploading(true);
+      const url = await uploadImage(file);
+      setFormData({ ...formData, logo: url });
+    } catch (err) {
+      console.error('Failed to upload image:', err);
+      alert('Ошибка при загрузке изображения');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!formData.logo) {
+      alert('Необходимо загрузить логотип');
+      return;
+    }
 
     try {
       if (editingPartner) {
@@ -118,14 +141,39 @@ export default function PartnerManagement() {
                 />
               </div>
               <div>
-                <Label htmlFor="logo">URL логотипа</Label>
-                <Input
-                  id="logo"
-                  type="url"
-                  value={formData.logo}
-                  onChange={(e) => setFormData({ ...formData, logo: e.target.value })}
-                  required
-                />
+                <Label htmlFor="logo">Логотип</Label>
+                <div className="space-y-2">
+                  <Input
+                    id="logo"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    disabled={uploading}
+                  />
+                  {uploading && (
+                    <p className="text-sm text-muted-foreground flex items-center gap-2">
+                      <Icon name="Loader2" size={16} className="animate-spin" />
+                      Загрузка...
+                    </p>
+                  )}
+                  {formData.logo && (
+                    <div className="flex items-center gap-2">
+                      <img
+                        src={formData.logo}
+                        alt="Превью"
+                        className="w-20 h-20 object-contain rounded border border-border p-2"
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setFormData({ ...formData, logo: '' })}
+                      >
+                        <Icon name="X" size={16} />
+                      </Button>
+                    </div>
+                  )}
+                </div>
               </div>
               <div>
                 <Label htmlFor="website">Сайт (необязательно)</Label>
