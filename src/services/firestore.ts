@@ -121,10 +121,23 @@ export const landlordsService = {
   }
 };
 
+export interface City {
+  id: string;
+  name: string;
+}
+
 export const citiesService = {
   async getAll(): Promise<string[]> {
     const snapshot = await getDocs(collection(db, COLLECTIONS.CITIES));
     return snapshot.docs.map(doc => doc.data().name as string);
+  },
+
+  async getAllWithIds(): Promise<City[]> {
+    const snapshot = await getDocs(collection(db, COLLECTIONS.CITIES));
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      name: doc.data().name as string
+    }));
   },
 
   async add(city: string): Promise<string> {

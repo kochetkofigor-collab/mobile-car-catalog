@@ -3,10 +3,10 @@ import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
-import { citiesService } from '@/services/firestore';
+import { citiesService, type City } from '@/services/firestore';
 
 export default function CityManagement() {
-  const [cities, setCities] = useState<string[]>([]);
+  const [cities, setCities] = useState<City[]>([]);
   const [newCityName, setNewCityName] = useState('');
   const [loading, setLoading] = useState(true);
 
@@ -17,7 +17,7 @@ export default function CityManagement() {
   const loadCities = async () => {
     setLoading(true);
     try {
-      const data = await citiesService.getAll();
+      const data = await citiesService.getAllWithIds();
       setCities(data);
     } catch (err) {
       console.error('Failed to load cities:', err);
@@ -38,10 +38,16 @@ export default function CityManagement() {
     }
   };
 
-  const handleDeleteCity = async (cityName: string) => {
+  const handleDeleteCity = async (cityId: string) => {
     if (!confirm('Удалить этот город?')) return;
 
-    alert('Удаление городов временно недоступно. Свяжитесь с администратором.');
+    try {
+      await citiesService.delete(cityId);
+      loadCities();
+    } catch (err) {
+      console.error('Failed to delete city:', err);
+      alert('Ошибка при удалении города');
+    }
   };
 
   if (loading) {
@@ -71,13 +77,13 @@ export default function CityManagement() {
 
       <div className="space-y-2">
         {cities.map(city => (
-          <Card key={city} className="p-3 hover:border-primary/50 transition-all">
+          <Card key={city.id} className="p-3 hover:border-primary/50 transition-all">
             <div className="flex items-center justify-between">
-              <span className="font-medium">{city}</span>
+              <span className="font-medium">{city.name}</span>
               <Button 
                 variant="destructive" 
                 size="sm"
-                onClick={() => handleDeleteCity(city)}
+                onClick={() => handleDeleteCity(city.id)}
               >
                 <Icon name="Trash2" size={16} />
               </Button>
