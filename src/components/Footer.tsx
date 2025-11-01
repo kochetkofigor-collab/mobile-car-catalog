@@ -72,22 +72,22 @@ export default function Footer() {
             <h3 className="font-semibold mb-4">Документы</h3>
             <ul className="space-y-3 text-sm">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="/terms" className="text-muted-foreground hover:text-primary transition-colors">
                   Пользовательское соглашение
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
                   Политика конфиденциальности
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="/personal-data-consent" className="text-muted-foreground hover:text-primary transition-colors">
                   Согласие на обработку персональных данных
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+                <a href="/third-party-consent" className="text-muted-foreground hover:text-primary transition-colors">
                   Согласие на передачу данных третьим лицам
                 </a>
               </li>
