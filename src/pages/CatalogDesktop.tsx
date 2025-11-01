@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Slider } from '@/components/ui/slider';
 import ListingRequestModal from '@/components/ListingRequestModal';
 import { carsService, brandsService, citiesService, type Brand } from '@/services/firestore';
 
@@ -18,8 +19,7 @@ export default function CatalogDesktop() {
   const [filters, setFilters] = useState({
     brand: 'all',
     city: 'all',
-    minPrice: '',
-    maxPrice: '',
+    priceRange: [1000, 10000] as [number, number],
     year: 'all'
   });
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -46,9 +46,8 @@ export default function CatalogDesktop() {
     const brandMatch = filters.brand === 'all' || car.brand === filters.brand;
     const cityMatch = filters.city === 'all' || car.city === filters.city;
     const yearMatch = filters.year === 'all' || car.year.toString() === filters.year;
-    const minPriceMatch = !filters.minPrice || car.pricePerDay >= parseInt(filters.minPrice);
-    const maxPriceMatch = !filters.maxPrice || car.pricePerDay <= parseInt(filters.maxPrice);
-    return brandMatch && cityMatch && yearMatch && minPriceMatch && maxPriceMatch;
+    const priceMatch = car.pricePerDay >= filters.priceRange[0] && car.pricePerDay <= filters.priceRange[1];
+    return brandMatch && cityMatch && yearMatch && priceMatch;
   });
 
   const years = Array.from(new Set(cars.map(car => car.year))).sort((a, b) => b - a);
@@ -156,31 +155,30 @@ export default function CatalogDesktop() {
                   </Select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-medium mb-2">Цена за сутки (₽)</label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <input
-                      type="number"
-                      placeholder="От"
-                      value={filters.minPrice}
-                      onChange={(e) => setFilters(prev => ({ ...prev, minPrice: e.target.value }))}
-                      className="px-3 py-2 bg-background border border-border rounded-md text-sm"
-                    />
-                    <input
-                      type="number"
-                      placeholder="До"
-                      value={filters.maxPrice}
-                      onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: e.target.value }))}
-                      className="px-3 py-2 bg-background border border-border rounded-md text-sm"
-                    />
+                <div className="space-y-2 pt-1">
+                  <label className="block text-sm font-medium mb-2 flex items-center gap-1.5">
+                    <Icon name="Banknote" size={14} />
+                    Цена за сутки
+                  </label>
+                  <Slider
+                    value={filters.priceRange}
+                    onValueChange={(value) => setFilters(prev => ({ ...prev, priceRange: [value[0], value[1]] as [number, number] }))}
+                    min={1000}
+                    max={10000}
+                    step={500}
+                    className="w-full"
+                  />
+                  <div className="flex justify-between text-xs">
+                    <span className="text-primary font-semibold">{filters.priceRange[0].toLocaleString('ru-RU')} ₽</span>
+                    <span className="text-primary font-semibold">{filters.priceRange[1].toLocaleString('ru-RU')} ₽</span>
                   </div>
                 </div>
 
-                {(filters.brand !== 'all' || filters.city !== 'all' || filters.year !== 'all' || filters.minPrice || filters.maxPrice) && (
+                {(filters.brand !== 'all' || filters.city !== 'all' || filters.year !== 'all' || filters.priceRange[0] !== 1000 || filters.priceRange[1] !== 10000) && (
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => setFilters({ brand: 'all', city: 'all', year: 'all', minPrice: '', maxPrice: '' })}
+                    onClick={() => setFilters({ brand: 'all', city: 'all', year: 'all', priceRange: [1000, 10000] })}
                   >
                     <Icon name="X" size={16} className="mr-2" />
                     Сбросить фильтры
