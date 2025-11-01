@@ -282,7 +282,7 @@ export default function CatalogDesktop() {
                         )}
                         {car.comingSoonDate && (
                           <Badge className="bg-primary text-primary-foreground pointer-events-none text-xs">
-                            Скоро
+                            Скоро • {new Date(car.comingSoonDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
                           </Badge>
                         )}
                         {car.rentalOnly && (
