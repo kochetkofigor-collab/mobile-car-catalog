@@ -182,7 +182,6 @@ export default function CatalogDesktop() {
             <div className="mb-6 flex items-center justify-between">
               <h2 className="font-cormorant text-3xl font-semibold">
                 Каталог автомобилей
-                <span className="text-muted-foreground text-xl ml-2">({filteredCars.length})</span>
               </h2>
             </div>
 
