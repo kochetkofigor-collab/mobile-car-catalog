@@ -269,28 +269,30 @@ export default function CatalogDesktop() {
                       )}
                     </div>
                     <div className="p-4">
-                      <div className="flex flex-wrap gap-1.5 mb-3">
-                        {car.isNew && (
-                          <Badge className="bg-primary text-primary-foreground pointer-events-none text-xs">
-                            Новинка
-                          </Badge>
-                        )}
-                        {car.isPromo && (
-                          <Badge className="bg-destructive text-destructive-foreground pointer-events-none text-xs">
-                            Акция
-                          </Badge>
-                        )}
-                        {car.comingSoonDate && (
-                          <Badge className="bg-primary text-primary-foreground pointer-events-none text-xs">
-                            Скоро • {new Date(car.comingSoonDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
-                          </Badge>
-                        )}
-                        {car.rentalOnly && (
-                          <Badge className="bg-secondary text-secondary-foreground pointer-events-none text-xs">
-                            Только аренда
-                          </Badge>
-                        )}
-                      </div>
+                      {(car.isNew || car.isPromo || car.comingSoonDate || car.rentalOnly) && (
+                        <div className="flex flex-wrap gap-1.5 mb-3">
+                          {car.isNew && (
+                            <Badge className="bg-primary text-primary-foreground pointer-events-none text-xs">
+                              Новинка
+                            </Badge>
+                          )}
+                          {car.isPromo && (
+                            <Badge className="bg-destructive text-destructive-foreground pointer-events-none text-xs">
+                              Акция
+                            </Badge>
+                          )}
+                          {car.comingSoonDate && (
+                            <Badge className="bg-primary text-primary-foreground pointer-events-none text-xs">
+                              Скоро • {new Date(car.comingSoonDate).toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' })}
+                            </Badge>
+                          )}
+                          {car.rentalOnly && (
+                            <Badge className="bg-secondary text-secondary-foreground pointer-events-none text-xs">
+                              Только аренда
+                            </Badge>
+                          )}
+                        </div>
+                      )}
                       <h3 className="font-cormorant text-xl font-semibold mb-1 group-hover:text-primary transition-colors">
                         {car.name}
                       </h3>
