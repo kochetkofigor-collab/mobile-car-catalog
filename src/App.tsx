@@ -9,6 +9,7 @@ import Catalog from "./pages/Catalog";
 import CarDetail from "./pages/CarDetail";
 import Admin from "./pages/Admin";
 import Login from "./pages/Login";
+import Profile from "./pages/Profile";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,6 +25,7 @@ const App = () => (
             <Route path="/" element={<Catalog />} />
             <Route path="/car/:id" element={<CarDetail />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

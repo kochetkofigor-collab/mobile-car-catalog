@@ -21,6 +21,7 @@ export interface Car {
   isPromo?: boolean;
   landlord?: Landlord;
   landlordId?: string;
+  userId?: string;
   color?: string;
   plateNumber?: string;
   sts?: string;

@@ -103,6 +103,10 @@ export default function Catalog() {
                       </div>
                     </DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate('/profile')}>
+                      <Icon name="User" size={16} className="mr-2" />
+                      Мой профиль
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/admin')}>
                       <Icon name="Settings" size={16} className="mr-2" />
                       Админ панель
