@@ -10,6 +10,17 @@ import { carsService } from '@/services/firestore';
 
 export default function Catalog() {
   const navigate = useNavigate();
+  
+  useEffect(() => {
+    const meta = document.createElement('meta');
+    meta.name = 'robots';
+    meta.content = 'noindex, nofollow';
+    document.head.appendChild(meta);
+    
+    return () => {
+      document.head.removeChild(meta);
+    };
+  }, []);
   const [cars, setCars] = useState<Car[]>([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({

@@ -1,0 +1,260 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Car } from '@/data/cars';
+import Icon from '@/components/ui/icon';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import ListingRequestModal from '@/components/ListingRequestModal';
+import { carsService, brandsService, citiesService, type Brand } from '@/services/firestore';
+
+export default function CatalogDesktop() {
+  const navigate = useNavigate();
+  const [cars, setCars] = useState<Car[]>([]);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [cities, setCities] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [filters, setFilters] = useState({
+    brand: 'all',
+    city: 'all',
+    minPrice: '',
+    maxPrice: '',
+    year: 'all'
+  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    Promise.all([
+      carsService.getAll(),
+      brandsService.getAll(),
+      citiesService.getAll()
+    ])
+      .then(([carsData, brandsData, citiesData]) => {
+        setCars(carsData);
+        setBrands(brandsData);
+        setCities(citiesData);
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('Failed to load data:', err);
+        setLoading(false);
+      });
+  }, []);
+
+  const filteredCars = cars.filter(car => {
+    const brandMatch = filters.brand === 'all' || car.brand === filters.brand;
+    const cityMatch = filters.city === 'all' || car.city === filters.city;
+    const yearMatch = filters.year === 'all' || car.year.toString() === filters.year;
+    const minPriceMatch = !filters.minPrice || car.pricePerDay >= parseInt(filters.minPrice);
+    const maxPriceMatch = !filters.maxPrice || car.pricePerDay <= parseInt(filters.maxPrice);
+    return brandMatch && cityMatch && yearMatch && minPriceMatch && maxPriceMatch;
+  });
+
+  const years = Array.from(new Set(cars.map(car => car.year))).sort((a, b) => b - a);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-b from-background to-background/95 flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <Icon name="Loader2" size={48} className="mx-auto text-primary animate-spin" />
+          <p className="text-muted-foreground">Загрузка автомобилей...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-background to-background/95">
+      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="font-cormorant text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-primary bg-clip-text text-transparent">
+                KEYRIDER
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1">Площадка для выбора авто</p>
+            </div>
+            <Button
+              variant="outline"
+              onClick={() => setIsModalOpen(true)}
+              className="border-border/60 hover:border-primary/50 hover:bg-primary/5 transition-all"
+            >
+              <Icon name="DollarSign" size={20} className="mr-2" />
+              Разместить авто
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <ListingRequestModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="grid grid-cols-12 gap-6">
+          <aside className="col-span-3 space-y-6">
+            <Card className="p-6 sticky top-24">
+              <h2 className="font-cormorant text-2xl font-semibold mb-4 flex items-center gap-2">
+                <Icon name="SlidersHorizontal" size={20} className="text-primary" />
+                Фильтры
+              </h2>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">Город</label>
+                  <Select value={filters.city} onValueChange={(value) => setFilters(prev => ({ ...prev, city: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Все города" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Все города</SelectItem>
+                      {cities.map(city => (
+                        <SelectItem key={city} value={city}>{city}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Марка</label>
+                  <Select value={filters.brand} onValueChange={(value) => setFilters(prev => ({ ...prev, brand: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Все марки" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Все марки</SelectItem>
+                      {brands.map(brand => (
+                        <SelectItem key={brand.id} value={brand.name}>{brand.name}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Год выпуска</label>
+                  <Select value={filters.year} onValueChange={(value) => setFilters(prev => ({ ...prev, year: value }))}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Любой год" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Любой год</SelectItem>
+                      {years.map(year => (
+                        <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">Цена за сутки (₽)</label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <input
+                      type="number"
+                      placeholder="От"
+                      value={filters.minPrice}
+                      onChange={(e) => setFilters(prev => ({ ...prev, minPrice: e.target.value }))}
+                      className="px-3 py-2 bg-background border border-border rounded-md text-sm"
+                    />
+                    <input
+                      type="number"
+                      placeholder="До"
+                      value={filters.maxPrice}
+                      onChange={(e) => setFilters(prev => ({ ...prev, maxPrice: e.target.value }))}
+                      className="px-3 py-2 bg-background border border-border rounded-md text-sm"
+                    />
+                  </div>
+                </div>
+
+                {(filters.brand !== 'all' || filters.city !== 'all' || filters.year !== 'all' || filters.minPrice || filters.maxPrice) && (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => setFilters({ brand: 'all', city: 'all', year: 'all', minPrice: '', maxPrice: '' })}
+                  >
+                    <Icon name="X" size={16} className="mr-2" />
+                    Сбросить фильтры
+                  </Button>
+                )}
+              </div>
+            </Card>
+          </aside>
+
+          <main className="col-span-9">
+            <div className="mb-6 flex items-center justify-between">
+              <h2 className="font-cormorant text-3xl font-semibold">
+                Каталог автомобилей
+                <span className="text-muted-foreground text-xl ml-2">({filteredCars.length})</span>
+              </h2>
+            </div>
+
+            {filteredCars.length === 0 ? (
+              <Card className="p-12 text-center">
+                <Icon name="Car" size={64} className="mx-auto text-muted-foreground/50 mb-4" />
+                <h3 className="text-xl font-semibold mb-2">Автомобили не найдены</h3>
+                <p className="text-muted-foreground">Попробуйте изменить фильтры поиска</p>
+              </Card>
+            ) : (
+              <div className="grid grid-cols-2 xl:grid-cols-3 gap-6">
+                {filteredCars.map(car => (
+                  <Card 
+                    key={car.id} 
+                    className="overflow-hidden hover:border-primary/50 transition-all cursor-pointer group"
+                    onClick={() => navigate(`/car/${car.id}`)}
+                  >
+                    <div className="relative aspect-video overflow-hidden bg-muted">
+                      <img 
+                        src={car.images[0]} 
+                        alt={car.name}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      {car.landlord?.isVerified && (
+                        <div className="absolute top-2 right-2">
+                          <Badge className="bg-primary text-primary-foreground">
+                            <Icon name="ShieldCheck" size={12} className="mr-1" />
+                            Проверен
+                          </Badge>
+                        </div>
+                      )}
+                      {car.isNew && (
+                        <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground">
+                          Новинка
+                        </Badge>
+                      )}
+                      {car.isPromo && (
+                        <Badge className="absolute top-2 left-2 bg-destructive text-destructive-foreground">
+                          Акция
+                        </Badge>
+                      )}
+                      {car.comingSoonDate && (
+                        <Badge className="absolute top-2 left-2 bg-primary text-primary-foreground">
+                          Скоро
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="p-4">
+                      <h3 className="font-cormorant text-xl font-semibold mb-1 group-hover:text-primary transition-colors">
+                        {car.name}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-3">
+                        {car.year} год • {car.city}
+                      </p>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-2xl font-bold text-primary">{car.pricePerDay.toLocaleString('ru-RU')} ₽</p>
+                          <p className="text-xs text-muted-foreground">за сутки</p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-sm font-semibold">{car.deposit.toLocaleString('ru-RU')} ₽</p>
+                          <p className="text-xs text-muted-foreground">залог</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            )}
+          </main>
+        </div>
+      </div>
+    </div>
+  );
+}
