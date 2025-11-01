@@ -48,10 +48,7 @@ export default function Login() {
           </p>
         </div>
 
-        <TelegramLoginButton
-          botUsername="keyrider_bot"
-          onError={handleError}
-        />
+        <TelegramLoginButton botUsername="keyrider_bot" onError={handleError} />
 
         <div className="mt-4 p-3 bg-muted rounded-lg text-sm text-muted-foreground">
           <p className="font-medium mb-1">💡 Как настроить:</p>
