@@ -78,9 +78,9 @@ export default function CatalogDesktop() {
             <Button
               variant="outline"
               onClick={() => setIsModalOpen(true)}
-              className="border-border/60 hover:border-primary/50 hover:bg-primary/5 transition-all"
+              className="border-border/60 hover:border-primary hover:bg-primary hover:text-white transition-all group"
             >
-              <Icon name="DollarSign" size={20} className="mr-2" />
+              <Icon name="DollarSign" size={20} className="mr-2 group-hover:text-white" />
               Разместить авто
             </Button>
           </div>
