@@ -299,7 +299,7 @@ export default function CatalogDesktop() {
                       <p className="text-sm text-muted-foreground mb-2">
                         {car.year} год • {car.city}
                       </p>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between mb-3">
                         <div>
                           <p className="text-2xl font-bold text-primary">{car.pricePerDay.toLocaleString('ru-RU')} ₽</p>
                           <p className="text-xs text-muted-foreground">за сутки</p>
@@ -308,6 +308,12 @@ export default function CatalogDesktop() {
                           <p className="text-sm font-semibold">{car.deposit.toLocaleString('ru-RU')} ₽</p>
                           <p className="text-xs text-muted-foreground">Депозит</p>
                         </div>
+                      </div>
+                      <div className="pt-3 border-t border-border/40">
+                        <p className="text-xs text-muted-foreground flex items-start gap-1.5">
+                          <Icon name="Info" size={12} className="flex-shrink-0 mt-0.5" />
+                          <span>Условия и цена могут отличаться. Уточняйте детали у арендодателя перед бронированием.</span>
+                        </p>
                       </div>
                     </div>
                   </Card>
