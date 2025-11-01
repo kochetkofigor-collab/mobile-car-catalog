@@ -8,6 +8,7 @@ import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import ListingRequestModal from '@/components/ListingRequestModal';
+import Footer from '@/components/Footer';
 import { carsService, brandsService, citiesService, type Brand } from '@/services/firestore';
 
 export default function CatalogDesktop() {
@@ -315,6 +316,7 @@ export default function CatalogDesktop() {
           </main>
         </div>
       </div>
+      <Footer />
     </div>
   );
 }
