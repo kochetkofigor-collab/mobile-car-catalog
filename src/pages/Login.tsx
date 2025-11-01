@@ -49,7 +49,7 @@ export default function Login() {
         </div>
 
         <TelegramLoginButton
-          botUsername="k@keyrider_bot"
+          botUsername="keyrider_bot"
           onError={handleError}
         />
 
