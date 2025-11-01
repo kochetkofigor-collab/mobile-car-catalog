@@ -207,7 +207,7 @@ export default function CatalogDesktop() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       {car.landlord?.isVerified && (
-                        <div className="absolute top-2 right-2">
+                        <div className="absolute top-2 right-2 pointer-events-none">
                           <Badge className="bg-primary text-primary-foreground">
                             <Icon name="ShieldCheck" size={12} className="mr-1" />
                             Проверен
