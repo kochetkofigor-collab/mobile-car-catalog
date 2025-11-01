@@ -48,11 +48,19 @@ export default function Login() {
           </p>
         </div>
 
-        <div className="flex justify-center">
-          <TelegramLoginButton
-            botId="Y7985105519:AAGsRPbcs8yPFaQ_jUQKcP_JuUs9x3-QYIM"
-            onError={handleError}
-          />
+        <TelegramLoginButton
+          botUsername="keyrider_auth_bot"
+          onError={handleError}
+        />
+        
+        <div className="mt-4 p-3 bg-muted rounded-lg text-sm text-muted-foreground">
+          <p className="font-medium mb-1">💡 Как настроить:</p>
+          <ol className="list-decimal list-inside space-y-1 text-xs">
+            <li>Создайте бота через @BotFather в Telegram</li>
+            <li>Замените keyrider_auth_bot на username вашего бота</li>
+            <li>Выполните команду /setdomain в @BotFather</li>
+            <li>Укажите домен вашего сайта</li>
+          </ol>
         </div>
 
         <button
