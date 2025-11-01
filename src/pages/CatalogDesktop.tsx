@@ -293,10 +293,10 @@ export default function CatalogDesktop() {
                           )}
                         </div>
                       )}
-                      <h3 className="font-cormorant text-xl font-semibold mb-1 group-hover:text-primary transition-colors">
+                      <h3 className={`font-cormorant text-xl font-semibold mb-1 group-hover:text-primary transition-colors ${!(car.isNew || car.isPromo || car.comingSoonDate || car.rentalOnly) ? 'mt-1' : ''}`}>
                         {car.name}
                       </h3>
-                      <p className="text-sm text-muted-foreground mb-3">
+                      <p className="text-sm text-muted-foreground mb-2">
                         {car.year} год • {car.city}
                       </p>
                       <div className="flex items-center justify-between">
