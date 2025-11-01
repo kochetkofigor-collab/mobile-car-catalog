@@ -195,7 +195,7 @@ export default function CarDetail() {
               <div>
                 {car.rentalOnly ? (
                   <>
-                    <p className="text-lg font-bold text-foreground">Не под выкуп</p>
+                    <p className="text-lg font-bold text-foreground">Без выкупа</p>
                     <p className="text-xs text-muted-foreground">Только аренда</p>
                   </>
                 ) : (
