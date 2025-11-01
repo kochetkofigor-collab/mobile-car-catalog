@@ -7,10 +7,11 @@ Returns: HTTP response dict
 
 import json
 import os
-import hashlib
 import secrets
 from typing import Dict, Any
 from datetime import datetime, timedelta
+import urllib.request
+import urllib.parse
 
 auth_tokens: Dict[str, Dict[str, Any]] = {}
 
@@ -40,9 +41,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 
                 if not bot_token:
                     return {
-                        'statusCode': 500,
+                        'statusCode': 200,
                         'headers': {'Content-Type': 'application/json'},
-                        'body': json.dumps({'error': 'Bot token not configured'}),
+                        'body': json.dumps({'ok': True}),
                         'isBase64Encoded': False
                     }
                 
@@ -51,31 +52,31 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 user = message.get('from', {})
                 chat_id = message.get('chat', {}).get('id')
                 
-                if text == '/start':
-                    token = secrets.token_urlsafe(32)
-                    
-                    auth_tokens[token] = {
-                        'user': {
-                            'id': user.get('id'),
-                            'first_name': user.get('first_name'),
-                            'last_name': user.get('last_name'),
-                            'username': user.get('username'),
-                            'photo_url': None
-                        },
-                        'created_at': datetime.now().isoformat(),
-                        'expires_at': (datetime.now() + timedelta(minutes=5)).isoformat()
-                    }
-                    
-                    import urllib.request
-                    import urllib.parse
-                    
-                    response_text = f"✅ Вы успешно авторизованы!\n\nВаш токен:\n`{token}`\n\nТокен действителен 5 минут."
+                if text.startswith('/start'):
+                    parts = text.split(' ')
+                    if len(parts) > 1:
+                        token = parts[1]
+                        
+                        auth_tokens[token] = {
+                            'user': {
+                                'id': user.get('id'),
+                                'first_name': user.get('first_name'),
+                                'last_name': user.get('last_name'),
+                                'username': user.get('username'),
+                                'photo_url': None
+                            },
+                            'created_at': datetime.now().isoformat(),
+                            'expires_at': (datetime.now() + timedelta(minutes=5)).isoformat()
+                        }
+                        
+                        response_text = f"✅ Вы успешно авторизованы!\n\nВернитесь на сайт KeyRider - авторизация произойдет автоматически."
+                    else:
+                        response_text = "👋 Привет! Нажмите кнопку 'Войти через Telegram' на сайте KeyRider для авторизации."
                     
                     send_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
                     params = {
                         'chat_id': chat_id,
-                        'text': response_text,
-                        'parse_mode': 'Markdown'
+                        'text': response_text
                     }
                     
                     data = urllib.parse.urlencode(params).encode('utf-8')
@@ -91,9 +92,9 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 
         except Exception as e:
             return {
-                'statusCode': 500,
+                'statusCode': 200,
                 'headers': {'Content-Type': 'application/json'},
-                'body': json.dumps({'error': str(e)}),
+                'body': json.dumps({'ok': True, 'error': str(e)}),
                 'isBase64Encoded': False
             }
     
@@ -103,7 +104,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         if not token:
             return {
                 'statusCode': 400,
-                'headers': {'Content-Type': 'application/json'},
+                'headers': {
+                    'Content-Type': 'application/json',
+                    'Access-Control-Allow-Origin': '*'
+                },
                 'body': json.dumps({'error': 'Token required'}),
                 'isBase64Encoded': False
             }
@@ -116,7 +120,10 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
                 del auth_tokens[token]
                 return {
                     'statusCode': 401,
-                    'headers': {'Content-Type': 'application/json'},
+                    'headers': {
+                        'Content-Type': 'application/json',
+                        'Access-Control-Allow-Origin': '*'
+                    },
                     'body': json.dumps({'error': 'Token expired'}),
                     'isBase64Encoded': False
                 }
@@ -136,14 +143,20 @@ def handler(event: Dict[str, Any], context: Any) -> Dict[str, Any]:
         
         return {
             'statusCode': 404,
-            'headers': {'Content-Type': 'application/json'},
+            'headers': {
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
+            },
             'body': json.dumps({'error': 'Token not found'}),
             'isBase64Encoded': False
         }
     
     return {
         'statusCode': 405,
-        'headers': {'Content-Type': 'application/json'},
+        'headers': {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*'
+        },
         'body': json.dumps({'error': 'Method not allowed'}),
         'isBase64Encoded': False
     }
