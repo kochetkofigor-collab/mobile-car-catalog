@@ -22,6 +22,20 @@ export default function Admin() {
   const [editingLandlord, setEditingLandlord] = useState<Landlord | null>(null);
   const [showCarForm, setShowCarForm] = useState(false);
   const [showLandlordForm, setShowLandlordForm] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    const saved = localStorage.getItem('theme');
+    return saved ? saved === 'dark' : true;
+  });
+
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+    }
+  }, [isDark]);
 
 
   useEffect(() => {
@@ -140,18 +154,28 @@ export default function Admin() {
               <Icon name="Settings" size={20} className="text-primary md:w-6 md:h-6" />
               <h1 className="font-cormorant text-xl md:text-3xl font-bold truncate">Панель управления</h1>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                localStorage.removeItem('isAdminAuthenticated');
-                navigate('/login');
-              }}
-              className="shrink-0"
-            >
-              <Icon name="LogOut" size={16} className="md:mr-2" />
-              <span className="hidden md:inline">Выйти</span>
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsDark(!isDark)}
+                className="shrink-0"
+              >
+                <Icon name={isDark ? "Sun" : "Moon"} size={16} />
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  localStorage.removeItem('isAdminAuthenticated');
+                  navigate('/login');
+                }}
+                className="shrink-0"
+              >
+                <Icon name="LogOut" size={16} className="md:mr-2" />
+                <span className="hidden md:inline">Выйти</span>
+              </Button>
+            </div>
           </div>
         </div>
       </header>
